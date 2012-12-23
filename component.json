@@ -11,5 +11,6 @@
   "license": "MIT",
   "scripts": [
     "index.js"
-  ]
+  ],
+  "twitter": "@ForbesLindesay"
 }
