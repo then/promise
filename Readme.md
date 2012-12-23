@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
+<a href="http://promises-aplus.github.com/promises-spec"><img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png" align="right" /></a>
 # promise
 
   This a bare bones [Promises/A+](http://promises-aplus.github.com/promises-spec/) implementation.
