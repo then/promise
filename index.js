@@ -1,5 +1,7 @@
 var isPromise = require('is-promise')
 
+var extensions = [];
+
 module.exports = Promise
 function Promise(fn) {
   if (!(this instanceof Promise)) {
@@ -10,26 +12,6 @@ function Promise(fn) {
   var value
   var waiting = []
   var running = false
-
-  if (typeof fn === 'function') {
-    function resolve(val, success) {
-      if (isResolved) return
-      if (isPromise(val)) val.then(fulfill, reject)
-      else {
-        isResolved = true
-        isFulfilled = success
-        value = val
-        next()
-      }
-    }
-    function fulfill(val) {
-      resolve(val, true)
-    }
-    function reject(err) {
-      resolve(err, false)
-    }
-    fn({fulfill: fulfill, reject: reject})
-  }
 
   function next(skipTimeout) {
     if (waiting.length) {
@@ -70,9 +52,38 @@ function Promise(fn) {
       if (isResolved && !running) next()
     });
   }
+  
+  (function () {
+    function resolve(val, success) {
+      if (isResolved) return
+      if (isPromise(val)) val.then(fulfill, reject)
+      else {
+        isResolved = true
+        isFulfilled = success
+        value = val
+        next()
+      }
+    }
+    function fulfill(val) {
+      resolve(val, true)
+    }
+    function reject(err) {
+      resolve(err, false)
+    }
+    var resolver = {fulfill: fulfill, reject: reject};
+    for (var i = 0; i < extensions.length; i++) {
+      extensions[i](this, resolver);
+    }
+    if (typeof fn === 'function') {
+      fn(resolver)
+    }
+  }());
 }
 function defer() {
   var resolver
   var promise = new Promise(function (res) { resolver = res })
   return {resolver: resolver, promise: promise}
 }
+Promise.use = function (extension) {
+  extensions.push(extension);
+};
