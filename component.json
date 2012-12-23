@@ -1,0 +1,15 @@
+{
+  "name": "promise",
+  "repo": "then/promise",
+  "description": "Bare bones Promises/A+ implementation",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "then/is-promise": "*"
+  },
+  "development": {},
+  "license": "MIT",
+  "scripts": [
+    "index.js"
+  ]
+}
