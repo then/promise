@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
 # promise
 
   This a bare bones [Promises/A+](http://promises-aplus.github.com/promises-spec/) implementation.
