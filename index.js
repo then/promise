@@ -55,20 +55,23 @@ function Promise(fn) {
   
   (function () {
     function resolve(val, success) {
+    }
+    function fulfill(val) {
       if (isResolved) return
       if (isPromise(val)) val.then(fulfill, reject)
       else {
         isResolved = true
-        isFulfilled = success
+        isFulfilled = true
         value = val
         next()
       }
     }
-    function fulfill(val) {
-      resolve(val, true)
-    }
     function reject(err) {
-      resolve(err, false)
+      if (isResolved) return
+      isResolved = true
+      isFulfilled = false
+      value = err
+      next()
     }
     var resolver = {fulfill: fulfill, reject: reject};
     for (var i = 0; i < extensions.length; i++) {
