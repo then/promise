@@ -54,14 +54,11 @@ function Promise(fn) {
   }
   
   (function () {
-    function resolve(val, success) {
-    }
     function fulfill(val) {
       if (isResolved) return
       if (isPromise(val)) val.then(fulfill, reject)
       else {
-        isResolved = true
-        isFulfilled = true
+        isResolved = isFulfilled = true
         value = val
         next()
       }
