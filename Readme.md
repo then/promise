@@ -64,3 +64,4 @@ Awesome.prototype.spread = function (cb) {
 ## License
 
   MIT
+
