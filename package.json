@@ -16,6 +16,6 @@
     "is-promise": "~1"
   },
   "devDependencies": {
-    "promises-aplus-tests": "https://github.com/promises-aplus/promises-tests/archive/master.tar.gz"
+    "promises-aplus-tests": "*"
   }
 }
