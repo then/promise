@@ -1,6 +1,6 @@
 {
   "name": "then-promise",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
