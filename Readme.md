@@ -14,14 +14,14 @@
 
   Server:
 
-    $ npm install then-promise
+    $ npm install promise
 
 ## API
 
   In the example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).  The resolver object has two methods `reject` and `fulfill` and their use is demonstrated here:
 
 ```javascript
-var Promise = require('then-promise');
+var Promise = require('promise');
 
 var promise = new Promise(function (resolver) {
     get('http://www.google.com', function (err, res) {
@@ -40,7 +40,7 @@ var promise = new Promise(function (resolver) {
   You can use inheritance if you want to create your own complete promise library with this as your basic starting point, perfect if you have lots of cool features you want to add.  Here is an example of a promise library called `Awesome`, which is built on top of `Promise` correctly.
 
 ```javascript
-var Promise = require('then-promise');
+var Promise = require('promise');
 function Awesome(fn) {
   Promise.call(this, fn);
 }

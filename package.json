@@ -1,5 +1,5 @@
 {
-  "name": "then-promise",
+  "name": "promise",
   "version": "1.2.1",
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
