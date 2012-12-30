@@ -44,7 +44,7 @@ var Promise = require('promise');
 function Awesome(fn) {
   Promise.call(this, fn);
 }
-Awesome.prototype = new Promise();
+Awesome.prototype = Object.create(Promise.prototype);
 Awesome.prototype.constructor = Awesome;
 
 //Awesome extension
