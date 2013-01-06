@@ -1,5 +1,10 @@
 var isPromise = require('is-promise')
 
+var nextTick;
+if (typeof setImediate === 'function') nextTick = setImediate
+else if (typeof process === 'object' && process && process.nextTick) nextTick = process.nextTick
+else nextTick = function (cb) { setTimeout(cb, 0) }
+
 var extensions = [];
 
 module.exports = Promise
@@ -39,7 +44,7 @@ function Promise(fn) {
             next(true);
           }
           if (skipTimeout) timeoutDone()
-          else setTimeout(timeoutDone, 0)
+          else nextTick(timeoutDone)
         } else if (isFulfilled) {
           resolver.fulfill(value)
           next(skipTimeout)
@@ -75,7 +80,11 @@ function Promise(fn) {
       extensions[i](this, resolver);
     }
     if (typeof fn === 'function') {
-      fn(resolver)
+      try {
+        fn(resolver)
+      } catch (ex) {
+        resolver.reject(ex);
+      }
     }
   }());
 }
