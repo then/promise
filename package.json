@@ -4,7 +4,7 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "test": "promises-aplus-tests test/adapter-a.js"
+    "test": "mocha -R spec --timeout 200 --slow 99999"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,8 @@
     "is-promise": "~1"
   },
   "devDependencies": {
-    "promises-aplus-tests": "*"
+    "promises-aplus-tests": "*",
+    "mocha-as-promised": "~1.2.1",
+    "better-assert": "~1.0.0"
   }
 }

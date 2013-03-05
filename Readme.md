@@ -8,32 +8,32 @@
 
 ## Installation
 
-  Client:
-
-    $ component install then/promise
-
   Server:
 
     $ npm install promise
 
+  Client:
+
+    $ component install then/promise
+
 ## API
 
-  In the example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).  The resolver object has two methods `reject` and `fulfill` and their use is demonstrated here:
+  In the example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
 
 ```javascript
 var Promise = require('promise');
 
-var promise = new Promise(function (resolver) {
+var promise = new Promise(function (resolve, reject) {
     get('http://www.google.com', function (err, res) {
-      if (err) resolver.reject(err);
-      else resolver.fulfill(res);
+      if (err) reject(err);
+      else resolve(res);
     });
   });
 ```
 
 ## Extending Promises
 
-  There are two options for extending the promises created by this library.
+  There are three options for extending the promises created by this library.
 
 ### Inheritance
 
@@ -42,6 +42,7 @@ var promise = new Promise(function (resolver) {
 ```javascript
 var Promise = require('promise');
 function Awesome(fn) {
+  if (!(this instanceof Awesome)) return new Awesome(fn);
   Promise.call(this, fn);
 }
 Awesome.prototype = Object.create(Promise.prototype);
@@ -56,6 +57,24 @@ Awesome.prototype.spread = function (cb) {
 ```
 
   N.B. if you fail to set the prototype and constructor properly or fail to do Promise.call, things can fail in really subtle ways.
+
+### Wrap
+
+  This is the nuclear option, for when you want to start from scratch.  It ensures you won't be impacted by anyone who is extending the prototype (see below).
+
+```javascript
+function Uber(fn) {
+  if (!(this instanceof Uber)) return new Uber(fn);
+  var _prom = new Promise(fn);
+  this.then = _prom.then;
+}
+
+Uber.prototype.spread = function (cb) {
+  return this.then(function (arr) {
+    return cb.apply(this, arr);
+  })
+};
+```
 
 ### Extending the Prototype
 

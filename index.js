@@ -1,98 +1,164 @@
 var isPromise = require('is-promise')
 
-var nextTick;
+var nextTick
 if (typeof setImediate === 'function') nextTick = setImediate
 else if (typeof process === 'object' && process && process.nextTick) nextTick = process.nextTick
 else nextTick = function (cb) { setTimeout(cb, 0) }
 
-var extensions = [];
+var extensions = []
 
 module.exports = Promise
 function Promise(fn) {
   if (!(this instanceof Promise)) {
-    return typeof fn === 'function' ? new Promise(fn) : defer()
+    return fn ? new Promise(fn) : defer()
   }
-  var isResolved = false
-  var isFulfilled = false
-  var value
-  var waiting = []
-  var running = false
+  if (typeof fn !== 'function') {
+    throw new TypeError('fn is not a function')
+  }
 
-  function next(skipTimeout) {
-    if (waiting.length) {
-      running = true
-      waiting.shift()(skipTimeout || false)
-    } else {
-      running = false
-    }
+  var state = {
+    isResolved: false,
+    isSettled: false,
+    isFulfilled: false,
+    value: null,
+    waiting: [],
+    running: false
   }
-  this.then = then;
-  function then(cb, eb) {
-    return new Promise(function (resolver) {
-      function done(skipTimeout) {
-        var callback = isFulfilled ? cb : eb
-        if (typeof callback === 'function') {
-          function timeoutDone() {
-            var val;
-            try {
-              val = callback(value)
-            } catch (ex) {
-              resolver.reject(ex)
-              return next()
-            }
-            resolver.fulfill(val);
-            next(true);
+
+  function _resolve(val) {
+    resolve(state, val);
+  }
+  function _reject(err) {
+    reject(state, err);
+  }
+  this.then = function _then(onFulfilled, onRejected) {
+    return then(state, onFulfilled, onRejected);
+  }
+
+  _resolve.fulfill = deprecate(_resolve, 'resolver.fulfill(x)', 'resolve(x)')
+  _resolve.reject = deprecate(_reject, 'resolver.reject', 'reject(x)')
+
+  try {
+    fn(_resolve, _reject)
+  } catch (ex) {
+    _reject(ex)
+  }
+}
+
+function resolve(promiseState, value) {
+  if (promiseState.isResolved) return
+  if (isPromise(value)) {
+    assimilate(promiseState, value)
+  } else {
+    settle(promiseState, true, value)
+  }
+}
+
+function reject(promiseState, reason) {
+  if (promiseState.isResolved) return
+  settle(promiseState, false, reason)
+}
+
+function then(promiseState, onFulfilled, onRejected) {
+  return new Promise(function (resolve, reject) {
+    function done(next, skipTimeout) {
+      var callback = promiseState.isFulfilled ? onFulfilled : onRejected
+      if (typeof callback === 'function') {
+        function timeoutDone() {
+          var val
+          try {
+            val = callback(promiseState.value)
+          } catch (ex) {
+            reject(ex)
+            return next(true)
           }
-          if (skipTimeout) timeoutDone()
-          else nextTick(timeoutDone)
-        } else if (isFulfilled) {
-          resolver.fulfill(value)
-          next(skipTimeout)
-        } else {
-          resolver.reject(value)
-          next(skipTimeout)
+          resolve(val)
+          next(true)
         }
+        if (skipTimeout) timeoutDone()
+        else nextTick(timeoutDone)
+      } else if (promiseState.isFulfilled) {
+        resolve(promiseState.value)
+        next(skipTimeout)
+      } else {
+        reject(promiseState.value)
+        next(skipTimeout)
       }
-      waiting.push(done)
-      if (isResolved && !running) next()
-    });
+    }
+    promiseState.waiting.push(done)
+    if (promiseState.isSettled && !promiseState.running) processQueue(promiseState)
+  })
+}
+
+function processQueue(promiseState) {
+  function next(skipTimeout) {
+    if (promiseState.waiting.length) {
+      promiseState.running = true
+      promiseState.waiting.shift()(next, skipTimeout)
+    } else {
+      promiseState.running = false
+    }
   }
-  
-  (function () {
-    function fulfill(val) {
-      if (isResolved) return
-      if (isPromise(val)) val.then(fulfill, reject)
-      else {
-        isResolved = isFulfilled = true
-        value = val
-        next()
+  next(false)
+}
+
+function settle(promiseState, isFulfilled, value) {
+  if (promiseState.isSettled) return
+
+  promiseState.isResolved = promiseState.isSettled = true
+  promiseState.value = value
+  promiseState.isFulfilled = isFulfilled
+
+  processQueue(promiseState)
+}
+
+function assimilate(promiseState, thenable) {
+  try {
+    promiseState.isResolved = true
+    thenable.then(function (res) {
+      if (isPromise(res)) {
+        assimilate(promiseState, res)
+      } else {
+        settle(promiseState, true, res)
       }
+    }, function (err) {
+      settle(promiseState, false, err)
+    })
+  } catch (ex) {
+    settle(promiseState, false, ex)
+  }
+}
+
+Promise.use = function (extension) {
+  extensions.push(extension)
+}
+
+
+function deprecate(method, name, alternative) {
+  return function () {
+    var err = new Error(name + ' is deprecated use ' + alternative)
+    if (typeof console !== 'undefined' && console && typeof console.warn === 'function') {
+      console.warn(name + ' is deprecated use ' + alternative)
+      if (err.stack) console.warn(err.stack)
+    } else {
+      nextTick(function () {
+        throw err
+      })
     }
-    function reject(err) {
-      if (isResolved) return
-      isResolved = true
-      isFulfilled = false
-      value = err
-      next()
-    }
-    var resolver = {fulfill: fulfill, reject: reject};
-    for (var i = 0; i < extensions.length; i++) {
-      extensions[i](this, resolver);
-    }
-    if (typeof fn === 'function') {
-      try {
-        fn(resolver)
-      } catch (ex) {
-        resolver.reject(ex);
-      }
-    }
-  }());
+    method.apply(this, arguments)
+  }
 }
 function defer() {
+  var err = new Error('promise.defer() is deprecated')
+  if (typeof console !== 'undefined' && console && typeof console.warn === 'function') {
+    console.warn('promise.defer() is deprecated')
+    if (err.stack) console.warn(err.stack)
+  } else {
+    nextTick(function () {
+      throw err
+    })
+  }
   var resolver
   var promise = new Promise(function (res) { resolver = res })
   return {resolver: resolver, promise: promise}
 }
-Promise.use = function (extension) {
-  extensions.push(extension);
-};
