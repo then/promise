@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "promises-aplus-tests": "*",
-    "mocha-as-promised": "~1.2.1",
-    "better-assert": "~1.0.0"
+    "mocha-as-promised": "~1.2",
+    "better-assert": "~1.0",
+    "mocha": "~1.8"
   }
 }
