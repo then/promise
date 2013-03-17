@@ -83,3 +83,5 @@ Uber.prototype.spread = function (cb) {
 ## License
 
   MIT
+
+![viewcount](https://viewcount.jepso.com/count/then/promise.png)
