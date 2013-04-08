@@ -5,8 +5,6 @@ if (typeof setImediate === 'function') nextTick = setImediate
 else if (typeof process === 'object' && process && process.nextTick) nextTick = process.nextTick
 else nextTick = function (cb) { setTimeout(cb, 0) }
 
-var extensions = []
-
 module.exports = Promise
 function Promise(fn) {
   if (!(this instanceof Promise)) {
@@ -128,11 +126,6 @@ function assimilate(promiseState, thenable) {
     settle(promiseState, false, ex)
   }
 }
-
-Promise.use = function (extension) {
-  extensions.push(extension)
-}
-
 
 function deprecate(method, name, alternative) {
   return function () {
