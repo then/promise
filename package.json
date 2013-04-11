@@ -13,7 +13,8 @@
   "author": "ForbesLindesay",
   "license": "MIT",
   "dependencies": {
-    "is-promise": "~1"
+    "is-promise": "~1",
+    "next-tick": "git://github.com/timoxley/next-tick"
   },
   "devDependencies": {
     "promises-aplus-tests": "*",
