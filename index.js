@@ -15,18 +15,23 @@ function Promise(fn) {
   }
 
   function handle(deferred) {
-    if (state === null)
-      return void deferreds.push(deferred)
+    if (state === null) {
+      deferreds.push(deferred)
+      return
+    }
     nextTick(function() {
       var cb = state ? deferred.onFulfilled : deferred.onRejected
-      if (typeof cb !== 'function')
-        return void (state ? deferred.resolve : deferred.reject)(value)
+      if (typeof cb !== 'function'){
+        (state ? deferred.resolve : deferred.reject)(value)
+        return
+      }
       var ret
       try {
         ret = cb(value)
       }
       catch (e) {
-        return void deferred.reject(e)
+        deferred.reject(e)
+        return
       }
       deferred.resolve(ret)
     })
@@ -35,8 +40,10 @@ function Promise(fn) {
   function resolve(newValue) {
     if (state !== null)
       return
-    if (isPromise(newValue))
-      return void newValue.then(resolve, reject)
+    if (isPromise(newValue)) {
+      newValue.then(resolve, reject)
+      return
+    }
     state = true
     value = newValue
     finale()
