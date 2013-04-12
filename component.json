@@ -5,7 +5,8 @@
   "version": "2.0.0",
   "keywords": [],
   "dependencies": {
-    "then/is-promise": "*"
+    "then/is-promise": "*",
+    "timoxley/next-tick": "*"
   },
   "development": {},
   "license": "MIT",
