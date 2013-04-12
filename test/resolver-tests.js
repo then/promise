@@ -1,4 +1,3 @@
-require('mocha-as-promised')();
 var assert = require('better-assert');
 var Promise = require('../');
 var sentinel = {};
@@ -9,8 +8,8 @@ var promise = new Promise(function (resolve) {
 var _it = it;
 describe('resolver-tests', function () {
   describe('The Promise Constructor', function () {
-    it('can be called without new with the same results', function () {
-      return Promise(function (resolve) { resolve(null); })
+    it('can be called without new with the same results', function (done) {
+      Promise(function (resolve) { resolve(null); }).then(done);
     })
     it('has `Object.getPrototypeOf(promise) === Promise.prototype`', function () {
       assert(Object.getPrototypeOf(promise) === Promise.prototype)
@@ -37,10 +36,10 @@ describe('resolver-tests', function () {
     })
     describe('if resolver is a function', function () {
       it('must be called with the promise\'s resolver arguments', function () {
-        return new Promise(function (resolve, reject) {
+        new Promise(function (resolve, reject) {
           assert(typeof resolve === 'function')
           assert(typeof reject === 'function')
-          resolve(null)
+          done();
         })
       })
       it('must be called immediately, before `Promise` returns', function () {
@@ -53,13 +52,13 @@ describe('resolver-tests', function () {
     })
     describe('Calling resolve(x)', function () {
       describe('if promise is resolved', function () {
-        it('nothing happens', function () {
+        it('nothing happens', function (done) {
           var thenable = {then: function (onComplete) {
             setTimeout(function () {
               onComplete(sentinel)
             }, 50)
           }};
-          return new Promise(function (resolve) {
+          new Promise(function (resolve) {
             process.nextTick(function () {
               resolve(thenable)
               resolve(null)
@@ -67,6 +66,11 @@ describe('resolver-tests', function () {
           })
           .then(function (result) {
             assert(result === sentinel)
+          })
+          .then(function () {
+            done()
+          }, function (err) {
+            done(err || new Error('Promise rejected'));
           })
         })
       })
@@ -77,12 +81,17 @@ describe('resolver-tests', function () {
           })
         })
         describe('otherwise', function () {
-          it('is fulfilled with x as the fulfillment value', function () {
-            return new Promise(function (resolve, reject) {
+          it('is fulfilled with x as the fulfillment value', function (done) {
+            new Promise(function (resolve, reject) {
               resolve(sentinel)
             })
             .then(function (fulfillmentValue) {
               assert(fulfillmentValue === sentinel)
+            })
+            .then(function () {
+              done()
+            }, function (err) {
+              done(err || new Error('Promise rejected'));
             })
           })
         })
@@ -90,13 +99,13 @@ describe('resolver-tests', function () {
     })
     describe('Calling reject(x)', function () {
       describe('if promise is resolved', function () {
-        it('nothing happens', function () {
+        it('nothing happens', function (done) {
           var thenable = {then: function (onComplete) {
             setTimeout(function () {
               onComplete(sentinel)
             }, 50)
           }};
-          return new Promise(function (resolve, reject) {
+          new Promise(function (resolve, reject) {
             process.nextTick(function () {
               resolve(thenable)
               reject('foo')
@@ -105,15 +114,25 @@ describe('resolver-tests', function () {
           .then(function (result) {
             assert(result === sentinel)
           })
+          .then(function () {
+            done()
+          }, function (err) {
+            done(err || new Error('Promise rejected'));
+          })
         })
       })
       describe('otherwise', function () {
-        it('is rejected with x as the rejection reason', function () {
-          return new Promise(function (resolve, reject) {
+        it('is rejected with x as the rejection reason', function (done) {
+          new Promise(function (resolve, reject) {
             reject(sentinel)
           })
           .then(null, function (rejectionReason) {
             assert(rejectionReason === sentinel)
+          })
+          .then(function () {
+            done()
+          }, function (err) {
+            done(err || new Error('Promise rejected'));
           })
         })
       })
@@ -121,28 +140,38 @@ describe('resolver-tests', function () {
   })
   describe('if resolver throws', function () {
     describe('if promise is resolved', function () {
-      it('nothing happens', function () {
+      it('nothing happens', function (done) {
         var thenable = {then: function (onComplete) {
           setTimeout(function () {
             onComplete(sentinel)
           }, 50)
         }};
-        return new Promise(function (resolve, reject) {
+        new Promise(function (resolve, reject) {
           resolve(thenable)
           throw new Error('foo');
         })
         .then(function (result) {
           assert(result === sentinel)
         })
+        .then(function () {
+          done()
+        }, function (err) {
+          done(err || new Error('Promise rejected'));
+        })
       })
     })
     describe('otherwise', function () {
       it('is rejected with e as the rejection reason', function () {
-        return new Promise(function (resolve, reject) {
+        new Promise(function (resolve, reject) {
           throw sentinel
         })
         .then(null, function (rejectionReason) {
           assert(rejectionReason === sentinel)
+        })
+        .then(function () {
+          done()
+        }, function (err) {
+          done(err || new Error('Promise rejected'));
         })
       })
     })
