@@ -1,6 +1,7 @@
 var nextTick = require('next-tick')
-  , isPromise = require('is-promise')
-module.exports =
+var isPromise = require('is-promise')
+
+module.exports = Promise
 function Promise(fn) {
   if (!(this instanceof Promise)) return new Promise(fn)
   if (typeof fn !== 'function') throw new TypeError('not a function')

@@ -4,7 +4,8 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec --timeout 200 --slow 99999"
+    "test": "mocha -R spec --timeout 200 --slow 99999",
+    "test-resolve": "mocha test/resolver-tests.js -R spec --timeout 200 --slow 999999"
   },
   "repository": {
     "type": "git",
