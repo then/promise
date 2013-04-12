@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "is-promise": "~1",
-    "next-tick": "git://github.com/nathan7/next-tick#stable"
+    "next-tick": "nathan7/next-tick#stable"
   },
   "devDependencies": {
     "promises-aplus-tests": "*",
