@@ -6,9 +6,9 @@ function Promise(fn) {
   if (!(this instanceof Promise)) return new Promise(fn)
   if (typeof fn !== 'function') throw new TypeError('not a function')
   var state = null
-    , delegating = false
-    , value = null
-    , deferreds = []
+  var delegating = false
+  var value = null
+  var deferreds = []
 
   this.then = function(onFulfilled, onRejected) {
     return new Promise(function(resolve, reject) {
