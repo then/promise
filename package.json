@@ -13,10 +13,6 @@
   },
   "author": "ForbesLindesay",
   "license": "MIT",
-  "dependencies": {
-    "is-promise": "~1",
-    "next-tick": "timoxley/next-tick"
-  },
   "devDependencies": {
     "promises-aplus-tests": "*",
     "better-assert": "~1.0",
