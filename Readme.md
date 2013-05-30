@@ -12,24 +12,109 @@
 
     $ npm install promise
 
-  Client:
+## Usage
 
-    $ component install then/promise
-
-## API
-
-  In the example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
+  The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
 
 ```javascript
 var Promise = require('promise');
 
 var promise = new Promise(function (resolve, reject) {
-    get('http://www.google.com', function (err, res) {
-      if (err) reject(err);
-      else resolve(res);
-    });
+  get('http://www.google.com', function (err, res) {
+    if (err) reject(err);
+    else resolve(res);
   });
+});
 ```
+
+## API
+
+Before all examples, you will need:
+
+```js
+var Promise = require('promise');
+```
+
+### Promise(resolver)
+
+This creates and returns a new promise.  The `new` keyword before `Promise` is optional.  `resolver` must be a function.  The `resolver` function is passed two arguments:
+
+ 1. `resolve` should be called with a single argument.  If it is called with a non-promise value then the promise is fulfilled with that value.  If it is called with a promise (A) then the returned promise takes on the state of that new promise (A).
+ 2. `reject` should be called with a single argument.  The returned promise will be rejected with that argument.
+
+### Static Functions
+
+  These methods are invoked by calling `Promise.methodName`.
+
+#### Promise.from(value)
+
+Converts values and foreign promises into Promises/A+ promises.  If you pass it a value then it returns a Promise for that value.  If you pass it something that is close to a promise (such as a jQuery attempt at a promise) it returns a Promise that takes on the state of `value` (rejected or fulfilled).
+
+#### Promise.denodeify(fn)
+
+Takes a function which accepts a node style callback and returns a new function that returns a promise instead.
+
+e.g.
+
+```javascript
+var fs = require('fs')
+
+var read = Promise.denodeify(fs.readFile)
+var write = Promise.denodeify(fs.writeFile)
+
+var p = read('foo.json', 'utf8')
+  .then(function (str) {
+    return write('foo.json', JSON.stringify(JSON.parse(str), null, '  '), 'utf8')
+  })
+```
+
+#### Promise.nodeify(fn)
+
+The twin to `denodeify` is useful when you want to export an API that can be used by people who haven't learnt about the brilliance of promises yet.
+
+```javascript
+module.exports = Promise.nodeify(awesomeAPI)
+function awesomeAPI(a, b) {
+  return download(a, b)
+}
+```
+
+If the last argument passed to `module.exports` is a function, then it will be treated like a node.js callback and not parsed on to the child function, otherwise the API will just return a promise.
+
+### Prototype Methods
+
+These methods are invoked on a promise instance by calling `myPromise.methodName`
+
+### Promise#then(onFulfilled, onRejected)
+
+This method follows the [Promises/A+ spec](http://promises-aplus.github.io/promises-spec/).  It explains things very clearly so I recommend you read it.
+
+Either `onFulfilled` or `onRejected` will be called and they will not be called more than once.  They will be passed a single argument and will always be called asynchronously (in the next turn of the event loop).
+
+If the promise is fulfilled then `onFulfilled` is called.  If the promise is rejected then `onRejected` is called.
+
+The call to `.then` also returns a promise.  If the handler that is called returns a promise, the promise returned by `.then` takes on the state of that returned promise.  If the handler that is called returns a value that is not a promise, the promise returned by `.then` will be fulfilled with that value. If the handler that is called throws an exception then the promise returned by `.then` is rejected with that exception.
+
+#### Promise#done(onFulfilled, onRejected)
+
+The same semantics as `.then` except that it does not return a promise and any exceptions are re-thrown so that they can be logged (crashing the applicaiton in non-browser environments)
+
+#### Promise#nodeify(callback)
+
+If `callback` is `null` or `undefined` it just returns `this`.  If `callback` is a function it is called with rejection reason as the first argument and result as the second argument (as per the node.js convention).
+
+This lets you write API functions that look like:
+
+```javascript
+funciton awesomeAPI(foo, bar, callback) {
+  return internalAPI(foo, bar)
+    .then(parseResult)
+    .then(null, retryErrors)
+    .nodeify(callback)
+}
+```
+
+People who use typical node.js style callbacks will be able to just pass a callback and get the expected behavior.  The enlightened people can not pass a callback and will get awesome promises.
 
 ## Extending Promises
 
@@ -83,5 +168,3 @@ Uber.prototype.spread = function (cb) {
 ## License
 
   MIT
-
-![viewcount](https://viewcount.jepso.com/count/then/promise.png)
