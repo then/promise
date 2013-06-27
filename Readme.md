@@ -53,6 +53,26 @@ This creates and returns a new promise.  The `new` keyword before `Promise` is o
 
 Converts values and foreign promises into Promises/A+ promises.  If you pass it a value then it returns a Promise for that value.  If you pass it something that is close to a promise (such as a jQuery attempt at a promise) it returns a Promise that takes on the state of `value` (rejected or fulfilled).
 
+#### Promise.all(array) / Promise.all(a, b, c, ...)
+
+Returns a promise for an array.  If it is called with a single argument that `Array.isArray` then this returns a promise for a copy of that array with any promises replaced by their fulfilled values.  Otherwise it returns a promise for an array that conatins its arguments, except with promises replaced by their resolution values.  e.g.
+
+```js
+Promise.all([Promise.from('a'), 'b', Promise.from('c')])
+  .then(function (res) {
+    assert(res[0] === 'a')
+    assert(res[1] === 'b')
+    assert(res[2] === 'c')
+  })
+
+Promise.all(Promise.from('a'), 'b', Promise.from('c'))
+  .then(function (res) {
+    assert(res[0] === 'a')
+    assert(res[1] === 'b')
+    assert(res[2] === 'c')
+  })
+```
+
 #### Promise.denodeify(fn)
 
 Takes a function which accepts a node style callback and returns a new function that returns a promise instead.
