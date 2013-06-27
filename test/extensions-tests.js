@@ -1,11 +1,22 @@
-var assert = require('better-assert');
-var Promise = require('../');
-var sentinel = {};
+var assert = require('better-assert')
+var Promise = require('../')
+var sentinel = {}
 var promise = new Promise(function (resolve) {
-  resolve(sentinel);
-});
+  resolve(sentinel)
+})
 var thenable = {then: function (fullfilled, rejected) { fullfilled(sentinel) }}
 var thenableRejected = {then: function (fullfilled, rejected) { rejected(sentinel) }}
+
+var a = {}
+var b = {}
+var c = {}
+
+var A = Promise.from(a)
+var B = Promise.from(b)
+var C = Promise.from(c)
+
+var rejection = {}
+var rejected = new Promise(function (resolve, reject) { reject(rejection) })
 
 describe('extensions', function () {
   describe('Promise.from', function () {
@@ -113,6 +124,127 @@ describe('extensions', function () {
           assert(res === 3)
           done()
         })
+    })
+  })
+  describe('Promise.all(...)', function () {
+    describe('an array', function () {
+      describe('that is empty', function () {
+        it('returns a promise for an empty array', function (done) {
+          var res = Promise.all([])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res.length === 0)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('of objects', function () {
+        it('returns a promise for the array', function (done) {
+          var res = Promise.all([a, b, c])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('of promises', function () {
+        it('returns a promise for an array containing the fulfilled values', function (done) {
+          var res = Promise.all([A, B, C])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('of mixed values', function () {
+        it('returns a promise for an array containing the fulfilled values', function (done) {
+          var res = Promise.all([A, b, C])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('containing at least one rejected promise', function () {
+        it('rejects the resulting promise', function (done) {
+          var res = Promise.all([A, rejected, C])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            throw new Error('Should be rejected')
+          },
+          function (err) {
+            assert(err === rejection)
+          })
+          .nodeify(done)
+        })
+      })
+    })
+    describe('multiple arguments', function () {
+      describe('which are objects', function () {
+        it('returns a promise for the array', function (done) {
+          var res = Promise.all(a, b, c)
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('which are promises', function () {
+        it('returns a promise for an array containing the fulfilled values', function (done) {
+          var res = Promise.all(A, B, C)
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('which are mixed values', function () {
+        it('returns a promise for an array containing the fulfilled values', function (done) {
+          var res = Promise.all(A, b, C)
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(Array.isArray(res))
+            assert(res[0] === a)
+            assert(res[1] === b)
+            assert(res[2] === c)
+          })
+          .nodeify(done)
+        })
+      })
+      describe('containing at least one rejected promise', function () {
+        it('rejects the resulting promise', function (done) {
+          var res = Promise.all(A, rejected, C)
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            throw new Error('Should be rejected')
+          },
+          function (err) {
+            assert(err === rejection)
+          })
+          .nodeify(done)
+        })
+      })
     })
   })
 
