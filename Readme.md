@@ -1,10 +1,13 @@
-[![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
 <a href="http://promises-aplus.github.com/promises-spec"><img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png" align="right" /></a>
 # promise
 
   This a bare bones [Promises/A+](http://promises-aplus.github.com/promises-spec/) implementation.
 
   It is designed to get the basics spot on correct, so that you can build extended promise implementations on top of it.
+
+[![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
+[![Dependency Status](https://gemnasium.com/then/promise.png)](https://gemnasium.com/then/promise)
+[![NPM version](https://badge.fury.io/js/promise.png)](http://badge.fury.io/js/promise)
 
 ## Installation
 

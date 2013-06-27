@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "promises-aplus-tests": "*",
-    "better-assert": "~1.0",
-    "mocha": "~1.9"
+    "better-assert": "*",
+    "mocha": "*"
   }
 }
