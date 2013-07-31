@@ -11,9 +11,17 @@
 
 ## Installation
 
-  Server:
+  **Server:**
 
     $ npm install promise
+    
+  **Client:**
+  
+  You can use browserify on the client, or download a standalone version from [www.promisejs.org](http://www.promisejs.org/implementations/#i-promise)
+  
+```html
+<script src="http://www.promisejs.org/implementations/promise/promise-3.2.0.js"></script>
+```
 
 ## Usage
 
