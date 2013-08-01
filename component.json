@@ -10,7 +10,7 @@
   "scripts": [
     "index.js",
     "core.js",
-    "lib/next-ticket.js"
+    "lib/next-tick.js"
   ],
   "twitter": "@ForbesLindesay"
 }
