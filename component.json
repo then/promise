@@ -8,7 +8,9 @@
   "development": {},
   "license": "MIT",
   "scripts": [
-    "index.js"
+    "index.js",
+    "core.js",
+    "lib/next-ticket.js"
   ],
   "twitter": "@ForbesLindesay"
 }
