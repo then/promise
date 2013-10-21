@@ -46,9 +46,9 @@ Before all examples, you will need:
 var Promise = require('promise');
 ```
 
-### Promise(resolver)
+### new Promise(resolver)
 
-This creates and returns a new promise.  The `new` keyword before `Promise` is optional.  `resolver` must be a function.  The `resolver` function is passed two arguments:
+This creates and returns a new promise.  `resolver` must be a function.  The `resolver` function is passed two arguments:
 
  1. `resolve` should be called with a single argument.  If it is called with a non-promise value then the promise is fulfilled with that value.  If it is called with a promise (A) then the returned promise takes on the state of that new promise (A).
  2. `reject` should be called with a single argument.  The returned promise will be rejected with that argument.
