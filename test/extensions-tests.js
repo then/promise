@@ -52,6 +52,8 @@ describe('extensions', function () {
             done()
           })
         assert(promise instanceof Promise)
+        assert(Promise.from(sentinel) instanceof Promise)
+        assert(Promise.from(sentinel).constructor === Promise)
       })
     })
   })

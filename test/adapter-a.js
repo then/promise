@@ -14,7 +14,7 @@ module.exports = {
     };
   },
   resolved: function (value) {
-    return new Promise(function (resolve) { resolve(value); });
+    return Promise.from(value);
   },
   rejected: function (value) {
     return new Promise(function (resolve, reject) { reject(value); });
