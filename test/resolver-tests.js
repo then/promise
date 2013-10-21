@@ -8,9 +8,6 @@ var promise = new Promise(function (resolve) {
 var _it = it;
 describe('resolver-tests', function () {
   describe('The Promise Constructor', function () {
-    it('can be called without new with the same results', function (done) {
-      Promise(function (resolve) { resolve(null); }).then(done);
-    })
     it('has `Object.getPrototypeOf(promise) === Promise.prototype`', function () {
       assert(Object.getPrototypeOf(promise) === Promise.prototype)
     })
