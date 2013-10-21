@@ -18,5 +18,8 @@
     "promises-aplus-tests": "*",
     "better-assert": "*",
     "mocha": "*"
+  },
+  "dependencies": {
+    "asap": "~1.0.0"
   }
 }
