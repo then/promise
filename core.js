@@ -56,7 +56,9 @@ function Promise(fn) {
         var then = newValue.then
         if (typeof then === 'function') {
           delegating = true
-          then.call(newValue, resolve_, reject_)
+          new Promise(function (resolve, reject) {
+            then.call(newValue, resolve, reject)
+          }).then(resolve_, reject_)
           return
         }
       }
