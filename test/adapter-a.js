@@ -1,7 +1,7 @@
 var Promise = require('../');
 
 module.exports = {
-  pending: function () {
+  deferred: function () {
     var resolve, reject;
     var promise = new Promise(function (_resolve, _reject) {
       resolve = _resolve;
@@ -9,11 +9,11 @@ module.exports = {
     });
     return {
       promise: promise,
-      fulfill: resolve,
+      resolve: resolve,
       reject: reject
     };
   },
-  fulfilled: function (value) {
+  resolved: function (value) {
     return new Promise(function (resolve) { resolve(value); });
   },
   rejected: function (value) {
