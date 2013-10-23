@@ -4,13 +4,14 @@
   "description": "Bare bones Promises/A+ implementation",
   "version": "3.2.0",
   "keywords": [],
-  "dependencies": {},
+  "dependencies": {
+    "johntron/asap": "*"
+  },
   "development": {},
   "license": "MIT",
   "scripts": [
     "index.js",
-    "core.js",
-    "lib/next-tick.js"
+    "core.js"
   ],
   "twitter": "@ForbesLindesay"
 }
