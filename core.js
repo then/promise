@@ -1,10 +1,10 @@
 'use strict';
 
 var asap = require('asap')
-var Symbol = require('es6-symbol')
 
-var State = new Symbol()
-var Value = new Symbol()
+var symbols = require('./symbols')
+var State = symbols.State
+var Value = symbols.Value
 
 module.exports = Promise
 function Promise(fn) {

@@ -5,12 +5,16 @@
 var Promise = require('./core.js')
 var asap = require('asap')
 
+var symbols = require('./symbols')
+var State = symbols.State
+var Value = symbols.Value
+
 module.exports = Promise
 
 /* Static Functions */
 
 function ValuePromise(value) {
-  this.then = function (onFulfilled) {
+  var then = this.then = function (onFulfilled) {
     if (typeof onFulfilled !== 'function') return this
     return new Promise(function (resolve, reject) {
       asap(function () {
@@ -22,6 +26,8 @@ function ValuePromise(value) {
       })
     })
   }
+  then[State] = true
+  then[Value] = value
 }
 var _Promise = function() {}
 _Promise.prototype = Promise.prototype
