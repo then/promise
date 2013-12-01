@@ -45,22 +45,29 @@ function Promise(fn) {
   }
 
   function resolve(newValue) {
+    _then[Value] = newValue
     try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-      if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.')
-      if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-        var then = newValue.then
-        if (typeof then === 'function') {
-          if (State in then) {
-            (then[State] ? resolve : reject)(then[Value])
+      do {
+        if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.')
+        if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+          var then = newValue.then
+          if (typeof then === 'function') {
+            if (State in then) {
+              (then[State] ? resolve : reject)(then[Value])
+            }
+            else if (Value in then) {
+              newValue = then[Value]
+              continue
+            }
+            else {
+              doResolve(then.bind(newValue), resolve, reject)
+            }
+            return
           }
-          else {
-            doResolve(then.bind(newValue), resolve, reject)
-          }
-          return
         }
-      }
+      } while (false)
       _then[State] = state = true
-      _then[Value] = value = newValue
+      value = newValue
       finale()
     } catch (e) { reject(e) }
   }
