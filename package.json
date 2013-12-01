@@ -20,6 +20,7 @@
     "mocha": "*"
   },
   "dependencies": {
-    "asap": "~1.0.0"
+    "asap": "~1.0.0",
+    "es6-symbol": "0.0.0"
   }
 }

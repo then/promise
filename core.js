@@ -1,6 +1,10 @@
 'use strict';
 
 var asap = require('asap')
+var Symbol = require('es6-symbol')
+
+var State = new Symbol()
+var Value = new Symbol()
 
 module.exports = Promise
 function Promise(fn) {
@@ -11,7 +15,7 @@ function Promise(fn) {
   var deferreds = []
   var self = this
 
-  this.then = function(onFulfilled, onRejected) {
+  var _then = this.then = function(onFulfilled, onRejected) {
     return new Promise(function(resolve, reject) {
       handle(new Handler(onFulfilled, onRejected, resolve, reject))
     })
@@ -46,19 +50,24 @@ function Promise(fn) {
       if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
         var then = newValue.then
         if (typeof then === 'function') {
-          doResolve(then.bind(newValue), resolve, reject)
+          if (State in then) {
+            (then[State] ? resolve : reject)(then[Value])
+          }
+          else {
+            doResolve(then.bind(newValue), resolve, reject)
+          }
           return
         }
       }
-      state = true
-      value = newValue
+      _then[State] = state = true
+      _then[Value] = value = newValue
       finale()
     } catch (e) { reject(e) }
   }
 
   function reject(newValue) {
-    state = false
-    value = newValue
+    _then[State] = state = false
+    _then[Value] = value = newValue
     finale()
   }
 
