@@ -23,7 +23,9 @@ function ValuePromise(value) {
     })
   }
 }
-ValuePromise.prototype = Object.create(Promise.prototype)
+var _Promise = function() {}
+_Promise.prototype = Promise.prototype
+ValuePromise.prototype = new _Promise()
 
 var TRUE = new ValuePromise(true)
 var FALSE = new ValuePromise(false)
