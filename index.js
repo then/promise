@@ -54,7 +54,9 @@ Promise.from = function (value) {
     try {
       var then = value.then
       if (typeof then === 'function') {
-        return new Promise(then.bind(value))
+        return new Promise(function(resolve, reject) {
+          resolve({ then: then.bind(value) })
+        })
       }
     } catch (ex) {
       return new Promise(function (resolve, reject) {
