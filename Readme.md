@@ -137,7 +137,7 @@ If `callback` is `null` or `undefined` it just returns `this`.  If `callback` is
 This lets you write API functions that look like:
 
 ```javascript
-funciton awesomeAPI(foo, bar, callback) {
+function awesomeAPI(foo, bar, callback) {
   return internalAPI(foo, bar)
     .then(parseResult)
     .then(null, retryErrors)
