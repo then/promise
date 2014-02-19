@@ -128,7 +128,7 @@ The call to `.then` also returns a promise.  If the handler that is called retur
 
 #### Promise#done(onFulfilled, onRejected)
 
-The same semantics as `.then` except that it does not return a promise and any exceptions are re-thrown so that they can be logged (crashing the applicaiton in non-browser environments)
+The same semantics as `.then` except that it does not return a promise and any exceptions are re-thrown so that they can be logged (crashing the application in non-browser environments)
 
 #### Promise#nodeify(callback)
 
