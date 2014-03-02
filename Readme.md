@@ -81,7 +81,7 @@ Promise.all(Promise.from('a'), 'b', Promise.from('c'))
   })
 ```
 
-### Nested promises
+#### Nested promises
 
 When nesting promises it is not necessary to provide an error handler at every level. A rejected promise will propagate the error to an error handler with the last promise. In the example below the async function increments the given value until it goes over the limit which causes the promise to be rejected and propagate the error to the last handler.
 
