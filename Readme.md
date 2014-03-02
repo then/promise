@@ -104,17 +104,22 @@ var doAsync = function(nbr) {
     return promise;
 };
 
+var handleSuccess = function(result) {
+    console.log('Success: ' + result);
+};
+
+var handleError = function(error) {
+    console.log('Error: ' + error);
+};
+
 doAsync(0).then(doAsync).
     then(doAsync).
     then(doAsync).
     then(doAsync).
     then(doAsync).
     then(doAsync).
-    then(function(result) {
-    console.log('Success: ' + result);
-}, function(error) {
-    console.log('Error: ' + error);
-});
+    then(doAsync).
+    then(handleSuccess, handleError);
 ```
 
 #### Promise.denodeify(fn)
