@@ -372,4 +372,20 @@ describe('extensions', function () {
         })
     })
   })
+
+  describe('inheritance', function () {
+    it('allows its prototype methods to act upon foreign constructors', function () {
+      function Awesome(fn) {
+        if (!(this instanceof Awesome)) return new Awesome(fn)
+        Promise.call(this, fn)
+      }
+      Awesome.prototype = Object.create(Promise.prototype)
+      Awesome.prototype.constructor = Awesome
+
+      var awesome = new Awesome(function () {})
+
+      assert(awesome.constructor === Awesome)
+      assert(awesome.then(function () {}).constructor === Awesome)
+    })
+  })
 })
