@@ -133,7 +133,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 }
 
 Promise.prototype.nodeify = function (callback) {
-  if (callback === null || typeof callback == 'undefined') return this
+  if (typeof callback != 'function') return this
 
   this.then(function (value) {
     asap(function () {
