@@ -58,15 +58,20 @@ Promise.from = Promise.cast = function (value) {
   return new ValuePromise(value)
 }
 Promise.denodeify = function (fn, argumentCount) {
-  argumentCount = argumentCount || Infinity
+  argumentCount = argumentCount || fn.length
   return function () {
     var self = this
     var args = Array.prototype.slice.call(arguments)
     return new Promise(function (resolve, reject) {
+      var cb
+      if (args.length === argumentCount) {
+        cb = args[args.length-1]
+      }
       while (args.length && args.length > argumentCount) {
         args.pop()
       }
       args.push(function (err, res) {
+        if (cb) cb(err, res)
         if (err) reject(err)
         else resolve(res)
       })
