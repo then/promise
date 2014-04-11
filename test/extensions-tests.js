@@ -152,6 +152,18 @@ describe('extensions', function () {
           done()
         })
     })
+    it('will not break existing callback compatibility', function (done) {
+      function wrap(val, key, callback) {
+        callback = arguments[arguments.length - 1]
+        return callback(null, {val: val, key: key})
+      }
+      var pwrap = Promise.denodeify(wrap)
+      pwrap('foo', 'nbd', function(err, wrapper) {
+        assert(wrapper.val === 'foo')
+        assert(wrapper.key === 'nbd')
+        done()
+      })
+    })
   })
   describe('Promise.nodeify(fn)', function () {
     it('converts a promise returning function into a callback function', function (done) {
