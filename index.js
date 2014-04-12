@@ -146,7 +146,7 @@ Promise.prototype.nodeify = function (callback) {
   })
 }
 
-Promise.prototype.catch = function (onRejected) {
+Promise.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected);
 }
 
@@ -170,3 +170,4 @@ Promise.race = function (values) {
     })
   });
 }
+
