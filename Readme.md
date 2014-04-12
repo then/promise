@@ -1,9 +1,9 @@
 <a href="http://promises-aplus.github.com/promises-spec"><img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png" align="right" /></a>
 # promise
 
-  This a bare bones [Promises/A+](http://promises-aplus.github.com/promises-spec/) implementation.
+This is a simple implementation of Promises.  It is a super set of ES6 Promises designed to have readable, performant code and to provide just the extensions that are absolutely necessary for using promises today.
 
-  It is designed to get the basics spot on correct, so that you can build extended promise implementations on top of it.
+For detailed tutorials on its use, see www.promisejs.org
 
 [![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
 [![Dependency Status](https://gemnasium.com/then/promise.png)](https://gemnasium.com/then/promise)
@@ -11,21 +11,21 @@
 
 ## Installation
 
-  **Server:**
+**Server:**
 
     $ npm install promise
-    
-  **Client:**
-  
-  You can use browserify on the client, or download a standalone version from [www.promisejs.org](http://www.promisejs.org/implementations/#i-promise)
-  
+
+**Client:**
+
+You can use browserify on the client, or use the pre-compiled script that acts as a pollyfill.
+
 ```html
-<script src="http://www.promisejs.org/implementations/promise/promise-3.2.0.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-4.0.0.js"></script>
 ```
 
 ## Usage
 
-  The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
+The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
 
 ```javascript
 var Promise = require('promise');
@@ -57,11 +57,13 @@ This creates and returns a new promise.  `resolver` must be a function.  The `re
 
   These methods are invoked by calling `Promise.methodName`.
 
-#### Promise.from(value)
+#### Promise.resolve(value)
+
+(deprecated aliases: `Promise.from(value)`, `Promise.cast(value)`)
 
 Converts values and foreign promises into Promises/A+ promises.  If you pass it a value then it returns a Promise for that value.  If you pass it something that is close to a promise (such as a jQuery attempt at a promise) it returns a Promise that takes on the state of `value` (rejected or fulfilled).
 
-#### Promise.all(array) / Promise.all(a, b, c, ...)
+#### Promise.all(array)
 
 Returns a promise for an array.  If it is called with a single argument that `Array.isArray` then this returns a promise for a copy of that array with any promises replaced by their fulfilled values.  Otherwise it returns a promise for an array that conatins its arguments, except with promises replaced by their resolution values.  e.g.
 
@@ -83,6 +85,8 @@ Promise.all(Promise.from('a'), 'b', Promise.from('c'))
 
 #### Promise.denodeify(fn)
 
+_Non Standard_
+
 Takes a function which accepts a node style callback and returns a new function that returns a promise instead.
 
 e.g.
@@ -100,6 +104,8 @@ var p = read('foo.json', 'utf8')
 ```
 
 #### Promise.nodeify(fn)
+
+_Non Standard_
 
 The twin to `denodeify` is useful when you want to export an API that can be used by people who haven't learnt about the brilliance of promises yet.
 
@@ -128,9 +134,13 @@ The call to `.then` also returns a promise.  If the handler that is called retur
 
 #### Promise#done(onFulfilled, onRejected)
 
+_Non Standard_
+
 The same semantics as `.then` except that it does not return a promise and any exceptions are re-thrown so that they can be logged (crashing the application in non-browser environments)
 
 #### Promise#nodeify(callback)
+
+_Non Standard_
 
 If `callback` is `null` or `undefined` it just returns `this`.  If `callback` is a function it is called with rejection reason as the first argument and result as the second argument (as per the node.js convention).
 

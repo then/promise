@@ -11,111 +11,14 @@ var a = {}
 var b = {}
 var c = {}
 
-var A = Promise.from(a)
-var B = Promise.from(b)
-var C = Promise.from(c)
+var A = Promise.resolve(a)
+var B = Promise.resolve(b)
+var C = Promise.resolve(c)
 
 var rejection = {}
 var rejected = new Promise(function (resolve, reject) { reject(rejection) })
 
 describe('extensions', function () {
-  describe('Promise.from', function () {
-    describe('if passed a true promise', function () {
-      it('returns it directly', function () {
-        assert(promise === Promise.from(promise))
-      })
-    })
-    describe('if passed a thenable', function () {
-      describe('using then', function () {
-        it('assimilates it', function (done) {
-          var i = 2
-          var promise = Promise.from(thenable)
-          var promiseRejected = Promise.from(thenableRejected)
-          assert(promise instanceof Promise)
-          assert(promiseRejected instanceof Promise)
-          promise.then(function (res) {
-            assert(res === sentinel)
-            if (0 === --i) done()
-          })
-          .then(null, done)
-          promiseRejected.then(null, function (err) {
-            assert(err === sentinel)
-            if (0 === --i) done()
-          })
-          .then(null, done)
-        })
-      })
-      describe('using catch', function () {
-        it('assimilates it', function (done) {
-          var i = 2
-          var promise = Promise.from(thenable)
-          var promiseRejected = Promise.from(thenableRejected)
-          assert(promise instanceof Promise)
-          assert(promiseRejected instanceof Promise)
-          promise.then(function (res) {
-            assert(res === sentinel)
-            if (0 === --i) done()
-          })
-          .catch(done)
-          promiseRejected.catch(function (err) {
-            assert(err === sentinel)
-            if (0 === --i) done()
-          })
-          .catch(done)
-        })
-      })
-    })
-    describe('if passed a value', function () {
-      it('wraps it in a promise', function (done) {
-        var promise = Promise.from(sentinel)
-          .then(function (res) {
-            assert(res === sentinel)
-            done()
-          })
-        assert(promise instanceof Promise)
-        assert(Promise.from(sentinel) instanceof Promise)
-        assert(Promise.from(sentinel).constructor === Promise)
-      })
-    })
-  })
-  describe('Promise.cast', function () {
-    describe('if passed a true promise', function () {
-      it('returns it directly', function () {
-        assert(promise === Promise.cast(promise))
-      })
-    })
-    describe('if passed a thenable', function () {
-      it('assimilates it', function (done) {
-        var i = 2
-        var promise = Promise.cast(thenable)
-        var promiseRejected = Promise.cast(thenableRejected)
-        assert(promise instanceof Promise)
-        assert(promiseRejected instanceof Promise)
-        promise.then(function (res) {
-          assert(res === sentinel)
-          if (0 === --i) done()
-        })
-        .then(null, done)
-        promiseRejected.then(null, function (err) {
-          assert(err === sentinel)
-          if (0 === --i) done()
-        })
-        .then(null, done)
-      })
-    })
-    describe('if passed a value', function () {
-      it('wraps it in a promise', function (done) {
-        var promise = Promise.cast(sentinel)
-          .then(function (res) {
-            assert(res === sentinel)
-            done()
-          })
-        assert(promise instanceof Promise)
-        assert(Promise.cast(sentinel) instanceof Promise)
-        assert(Promise.cast(sentinel).constructor === Promise)
-      })
-    })
-  })
   describe('Promise.denodeify(fn, [argumentCount])', function () {
     it('returns a function that uses promises instead of callbacks', function (done) {
       function wrap(val, key, callback) {
@@ -156,7 +59,7 @@ describe('extensions', function () {
   describe('Promise.nodeify(fn)', function () {
     it('converts a promise returning function into a callback function', function (done) {
       var add = Promise.nodeify(function (a, b) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             return a + b
           })
@@ -169,7 +72,7 @@ describe('extensions', function () {
     })
     it('converts rejected promises into the first argument of the callback', function (done) {
       var add = Promise.nodeify(function (a, b) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             throw sentinel
           })
@@ -187,7 +90,7 @@ describe('extensions', function () {
     })
     it('passes through when no callback is provided', function (done) {
       var add = Promise.nodeify(function (a, b) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             return a + b
           })
@@ -265,60 +168,6 @@ describe('extensions', function () {
         })
       })
     })
-    describe('multiple arguments', function () {
-      describe('which are objects', function () {
-        it('returns a promise for the array', function (done) {
-          var res = Promise.all(a, b, c)
-          assert(res instanceof Promise)
-          res.then(function (res) {
-            assert(Array.isArray(res))
-            assert(res[0] === a)
-            assert(res[1] === b)
-            assert(res[2] === c)
-          })
-          .nodeify(done)
-        })
-      })
-      describe('which are promises', function () {
-        it('returns a promise for an array containing the fulfilled values', function (done) {
-          var res = Promise.all(A, B, C)
-          assert(res instanceof Promise)
-          res.then(function (res) {
-            assert(Array.isArray(res))
-            assert(res[0] === a)
-            assert(res[1] === b)
-            assert(res[2] === c)
-          })
-          .nodeify(done)
-        })
-      })
-      describe('which are mixed values', function () {
-        it('returns a promise for an array containing the fulfilled values', function (done) {
-          var res = Promise.all(A, b, C)
-          assert(res instanceof Promise)
-          res.then(function (res) {
-            assert(Array.isArray(res))
-            assert(res[0] === a)
-            assert(res[1] === b)
-            assert(res[2] === c)
-          })
-          .nodeify(done)
-        })
-      })
-      describe('containing at least one rejected promise', function () {
-        it('rejects the resulting promise', function (done) {
-          var res = Promise.all(A, rejected, C)
-          assert(res instanceof Promise)
-          res.then(function (res) {
-            throw new Error('Should be rejected')
-          },
-          function (err) {
-            assert(err === rejection)
-          })
-          .nodeify(done)
-        })
-      })
-    })
   })
 
   describe('promise.done(onFulfilled, onRejected)', function () {
@@ -332,7 +181,7 @@ describe('extensions', function () {
   describe('promise.nodeify(callback)', function () {
     it('converts a promise returning function into a callback function', function (done) {
       function add(a, b, callback) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             return a + b
           })
@@ -346,7 +195,7 @@ describe('extensions', function () {
     })
     it('converts rejected promises into the first argument of the callback', function (done) {
       function add(a, b, callback) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             throw sentinel
           })
@@ -359,7 +208,7 @@ describe('extensions', function () {
     })
     it('passes through when no callback is provided', function (done) {
       function add(a, b, callback) {
-        return Promise.from(a)
+        return Promise.resolve(a)
           .then(function (a) {
             return a + b
           })
