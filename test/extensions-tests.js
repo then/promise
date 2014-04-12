@@ -56,12 +56,12 @@ describe('extensions', function () {
             assert(res === sentinel)
             if (0 === --i) done()
           })
-          .catch(done)
-          promiseRejected.catch(function (err) {
+          ['catch'](done)
+          promiseRejected['catch'](function (err) {
             assert(err === sentinel)
             if (0 === --i) done()
           })
-          .catch(done)
+          ['catch'](done)
         })
       })
     })
