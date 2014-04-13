@@ -58,7 +58,7 @@ Promise.from = Promise.cast = function (value) {
   return new ValuePromise(value)
 }
 Promise.denodeify = function (fn, argumentCount) {
-  argumentCount = argumentCount || fn.length
+  argumentCount = argumentCount || fn.length || Infinity
   return function () {
     var self = this
     var args = Array.prototype.slice.call(arguments)
