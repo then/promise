@@ -32,7 +32,7 @@ var UNDEFINED = new ValuePromise(undefined)
 var ZERO = new ValuePromise(0)
 var EMPTYSTRING = new ValuePromise('')
 
-Promise.from = Promise.cast = function (value) {
+Promise.resolve = function (value) {
   if (value instanceof Promise) return value
 
   if (value === null) return NULL
@@ -57,6 +57,14 @@ Promise.from = Promise.cast = function (value) {
 
   return new ValuePromise(value)
 }
+
+Promise.from = Promise.cast = function (value) {
+  var err = new Error('Promise.from and Promise.cast are deprecated, use Promise.resolve instead')
+  err.name = 'Warning'
+  console.warn(err.stack)
+  return Promise.resolve(value)
+}
+
 Promise.denodeify = function (fn, argumentCount) {
   argumentCount = argumentCount || Infinity
   return function () {
@@ -93,7 +101,14 @@ Promise.nodeify = function (fn) {
 }
 
 Promise.all = function () {
-  var args = Array.prototype.slice.call(arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0] : arguments)
+  var calledWithArray = arguments.length === 1 && Array.isArray(arguments[0])
+  var args = Array.prototype.slice.call(calledWithArray ? arguments[0] : arguments)
+
+  if (!calledWithArray) {
+    var err = new Error('Promise.all should be called with a single array, calling it with multiple arguments is deprecated')
+    err.name = 'Warning'
+    console.warn(err.stack)
+  }
 
   return new Promise(function (resolve, reject) {
     if (args.length === 0) return resolve([])
@@ -119,6 +134,20 @@ Promise.all = function () {
       res(i, args[i])
     }
   })
+}
+
+Promise.reject = function (value) {
+  return new Promise(function (resolve, reject) { 
+    reject(value);
+  });
+}
+
+Promise.race = function (values) {
+  return new Promise(function (resolve, reject) { 
+    values.forEach(function(value){
+      Promise.resolve(value).then(resolve, reject);
+    })
+  });
 }
 
 /* Prototype Methods */
@@ -149,25 +178,3 @@ Promise.prototype.nodeify = function (callback) {
 Promise.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected);
 }
-
-
-Promise.resolve = function (value) {
-  return new Promise(function (resolve) { 
-    resolve(value);
-  });
-}
-
-Promise.reject = function (value) {
-  return new Promise(function (resolve, reject) { 
-    reject(value);
-  });
-}
-
-Promise.race = function (values) {
-  return new Promise(function (resolve, reject) { 
-    values.map(function(value){
-      Promise.cast(value).then(resolve, reject);
-    })
-  });
-}
-
