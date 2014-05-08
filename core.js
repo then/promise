@@ -17,6 +17,10 @@ function Promise(fn) {
     })
   }
 
+  this.catch = function(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+
   function handle(deferred) {
     if (state === null) {
       deferreds.push(deferred)
