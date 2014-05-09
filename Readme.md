@@ -5,9 +5,9 @@ This is a simple implementation of Promises.  It is a super set of ES6 Promises 
 
 For detailed tutorials on its use, see www.promisejs.org
 
-[![Build Status](https://travis-ci.org/then/promise.png)](https://travis-ci.org/then/promise)
-[![Dependency Status](https://gemnasium.com/then/promise.png)](https://gemnasium.com/then/promise)
-[![NPM version](https://badge.fury.io/js/promise.png)](http://badge.fury.io/js/promise)
+[![Build Status](https://img.shields.io/travis/then/promise/master.svg)](https://travis-ci.org/then/promise)
+[![Dependency Status](https://img.shields.io/gemnasium/then/promise.svg)](https://gemnasium.com/then/promise)
+[![NPM version](https://img.shields.io/npm/v/promise.svg)](https://www.npmjs.org/package/promise)
 
 ## Installation
 
