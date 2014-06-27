@@ -86,14 +86,15 @@ Promise.nodeify = function (fn) {
   return function () {
     var args = Array.prototype.slice.call(arguments)
     var callback = typeof args[args.length - 1] === 'function' ? args.pop() : null
+    var ctx = this
     try {
-      return fn.apply(this, arguments).nodeify(callback)
+      return fn.apply(this, arguments).nodeify(callback, ctx)
     } catch (ex) {
       if (callback === null || typeof callback == 'undefined') {
         return new Promise(function (resolve, reject) { reject(ex) })
       } else {
         asap(function () {
-          callback(ex)
+          callback.call(ctx, ex)
         })
       }
     }
@@ -161,16 +162,16 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
   })
 }
 
-Promise.prototype.nodeify = function (callback) {
+Promise.prototype.nodeify = function (callback, ctx) {
   if (typeof callback != 'function') return this
 
   this.then(function (value) {
     asap(function () {
-      callback(null, value)
+      callback.call(ctx, null, value)
     })
   }, function (err) {
     asap(function () {
-      callback(err)
+      callback.call(ctx, err)
     })
   })
 }
