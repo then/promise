@@ -101,15 +101,11 @@ Promise.nodeify = function (fn) {
   }
 }
 
-Promise.all = function () {
-  var calledWithArray = arguments.length === 1 && Array.isArray(arguments[0])
-  var args = Array.prototype.slice.call(calledWithArray ? arguments[0] : arguments)
+Promise.all = function (arr) {
+  if (arguments.length !== 1 || !Array.isArray(arr))
+    return variadicAll.apply(this, arguments)
 
-  if (!calledWithArray) {
-    var err = new Error('Promise.all should be called with a single array, calling it with multiple arguments is deprecated')
-    err.name = 'Warning'
-    console.warn(err.stack)
-  }
+  var args = Array.prototype.slice.call(arr)
 
   return new Promise(function (resolve, reject) {
     if (args.length === 0) return resolve([])
@@ -135,6 +131,14 @@ Promise.all = function () {
       res(i, args[i])
     }
   })
+}
+
+function variadicAll() {
+  var err = new Error('Promise.all should be called with a single array, calling it with multiple arguments is deprecated')
+  err.name = 'Warning'
+  console.warn(err.stack)
+
+  return Promise.all(Array.prototype.slice.call(arguments))
 }
 
 Promise.reject = function (value) {
