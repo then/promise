@@ -23,6 +23,12 @@ You can use browserify on the client, or use the pre-compiled script that acts a
 <script src="https://www.promisejs.org/polyfills/promise-4.0.0.js"></script>
 ```
 
+Note that the [es5-shim](https://github.com/es-shims/es5-shim) must be loaded before this library to support browsers pre IE9.
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
+```
+
 ## Usage
 
 The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
