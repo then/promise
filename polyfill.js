@@ -7,4 +7,4 @@ if (typeof Promise === 'undefined') {
   require('./lib/es6-extensions.js')
 }
 
-require('./polfill-done.js');
+require('./polyfill-done.js');
