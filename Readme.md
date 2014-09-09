@@ -17,7 +17,7 @@ For detailed tutorials on its use, see www.promisejs.org
 
 **Client:**
 
-You can use browserify on the client, or use the pre-compiled script that acts as a pollyfill.
+You can use browserify on the client, or use the pre-compiled script that acts as a polyfill.
 
 ```html
 <script src="https://www.promisejs.org/polyfills/promise-4.0.0.js"></script>
