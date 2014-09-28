@@ -9,9 +9,13 @@
   },
   "development": {},
   "license": "MIT",
+  "main": "index.js",
   "scripts": [
     "index.js",
-    "core.js"
+    "lib/core.js",
+    "lib/done.js",
+    "lib/es6-extensions.js",
+    "lib/node-extensions.js"
   ],
   "twitter": "@ForbesLindesay"
 }
