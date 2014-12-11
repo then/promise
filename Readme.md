@@ -138,6 +138,10 @@ If the promise is fulfilled then `onFulfilled` is called.  If the promise is rej
 
 The call to `.then` also returns a promise.  If the handler that is called returns a promise, the promise returned by `.then` takes on the state of that returned promise.  If the handler that is called returns a value that is not a promise, the promise returned by `.then` will be fulfilled with that value. If the handler that is called throws an exception then the promise returned by `.then` is rejected with that exception.
 
+#### Promise#catch(onRejected)
+
+Sugar for `Promise#then(null, onRejected)`, to mirror `catch` in synchronous code.
+
 #### Promise#done(onFulfilled, onRejected)
 
 _Non Standard_
