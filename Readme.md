@@ -1,4 +1,4 @@
-<a href="http://promises-aplus.github.com/promises-spec"><img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png" align="right" /></a>
+<a href="https://promises-aplus.github.io/promises-spec"><img src="https://promises-aplus.github.io/promises-spec/assets/logo-small.png" align="right" /></a>
 # promise
 
 This is a simple implementation of Promises.  It is a super set of ES6 Promises designed to have readable, performant code and to provide just the extensions that are absolutely necessary for using promises today.
