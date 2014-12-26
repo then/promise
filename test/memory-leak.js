@@ -23,7 +23,9 @@ function next() {
       if (typeof global.gc === 'function') {
         global.gc()
         sampleB = process.memoryUsage()
+        console.log('Memory usage at start:');
         console.dir(sampleA)
+        console.log('Memory usage at end:');
         console.dir(sampleB)
         assert(sampleA.rss * 1.2 > sampleB.rss, 'RSS should not grow by more than 20%')
         assert(sampleA.heapTotal * 1.2 > sampleB.heapTotal, 'heapTotal should not grow by more than 20%')

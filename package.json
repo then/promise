@@ -4,9 +4,9 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 200 --slow 99999 && npm run test-memory-leak",
-    "test-resolve": "mocha test/resolver-tests.js -R spec --timeout 200 --slow 999999",
-    "test-extensions": "mocha test/extensions-tests.js -R spec --timeout 200 --slow 999999",
+    "test": "mocha --timeout 200 --slow 99999 -R dot && npm run test-memory-leak",
+    "test-resolve": "mocha test/resolver-tests.js --timeout 200 --slow 999999",
+    "test-extensions": "mocha test/extensions-tests.js --timeout 200 --slow 999999",
     "test-memory-leak": "node --expose-gc test/memory-leak.js"
   },
   "repository": {
