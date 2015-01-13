@@ -55,6 +55,20 @@ describe('extensions', function () {
           done()
         })
     })
+    it('resolves correctly when the wrapped function returns a promise anyway', function (done) {
+      function wrap(val, key, callback) {
+        return new Promise(function(resolve, reject) {
+          resolve({val: val, key: key})
+        })
+      }
+      var pwrap = Promise.denodeify(wrap)
+      pwrap(sentinel, 'foo')
+        .then(function (wrapper) {
+          assert(wrapper.val === sentinel)
+          assert(wrapper.key === 'foo')
+          done()
+        })
+    })
   })
   describe('Promise.nodeify(fn)', function () {
     it('converts a promise returning function into a callback function', function (done) {
