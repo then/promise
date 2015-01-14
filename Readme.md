@@ -1,4 +1,4 @@
-<a href="https://promises-aplus.github.io/promises-spec"><img src="https://promises-aplus.github.io/promises-spec/assets/logo-small.png" align="right" /></a>
+<a href="https://promisesaplus.com/"><img src="https://promisesaplus.com/assets/logo-small.png" align="right" /></a>
 # promise
 
 This is a simple implementation of Promises.  It is a super set of ES6 Promises designed to have readable, performant code and to provide just the extensions that are absolutely necessary for using promises today.
@@ -20,7 +20,7 @@ For detailed tutorials on its use, see www.promisejs.org
 You can use browserify on the client, or use the pre-compiled script that acts as a polyfill.
 
 ```html
-<script src="https://www.promisejs.org/polyfills/promise-4.0.0.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
 ```
 
 Note that the [es5-shim](https://github.com/es-shims/es5-shim) must be loaded before this library to support browsers pre IE9.
