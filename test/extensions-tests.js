@@ -196,6 +196,19 @@ describe('extensions', function () {
         })
       })
     })
+    describe('a list of values', function () {
+      it('resolve to an array of values', function (done) {
+        var res = Promise.all(A, b, C)
+        assert(res instanceof Promise)
+        res.then(function (res) {
+          assert(Array.isArray(res))
+          assert(res[0] === a)
+          assert(res[1] === b)
+          assert(res[2] === c)
+        })
+        .nodeify(done)
+      })
+    })
   })
 
   describe('promise.done(onFulfilled, onRejected)', function () {
