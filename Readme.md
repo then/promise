@@ -71,17 +71,10 @@ Converts values and foreign promises into Promises/A+ promises.  If you pass it 
 
 #### Promise.all(array)
 
-Returns a promise for an array.  If it is called with a single argument that `Array.isArray` then this returns a promise for a copy of that array with any promises replaced by their fulfilled values.  Otherwise it returns a promise for an array that conatins its arguments, except with promises replaced by their resolution values.  e.g.
+Returns a promise for an array.  If it is called with a single argument that `Array.isArray` then this returns a promise for a copy of that array with any promises replaced by their fulfilled values.  e.g.
 
 ```js
 Promise.all([Promise.resolve('a'), 'b', Promise.resolve('c')])
-  .then(function (res) {
-    assert(res[0] === 'a')
-    assert(res[1] === 'b')
-    assert(res[2] === 'c')
-  })
-
-Promise.all(Promise.resolve('a'), 'b', Promise.resolve('c'))
   .then(function (res) {
     assert(res[0] === 'a')
     assert(res[1] === 'b')
