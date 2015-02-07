@@ -20,6 +20,6 @@
     "mocha": "*"
   },
   "dependencies": {
-    "asap": "~2.0.0"
+    "asap": "~2.0.1"
   }
 }
