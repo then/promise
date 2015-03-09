@@ -129,6 +129,16 @@ describe('extensions', function () {
         done()
       })
     })
+    it('works with thenables', function (done) {
+      var thenableNodeified = Promise.nodeify(function () {
+        return thenable;
+      })
+      thenableNodeified(function (err, res) {
+        if (err) return done(err)
+        assert(res === sentinel)
+        return done()
+      })
+    })
   })
   describe('Promise.all(...)', function () {
     describe('an array', function () {
