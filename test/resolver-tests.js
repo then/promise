@@ -7,7 +7,6 @@ var promise = new Promise(function (resolve) {
   resolve(sentinel);
 });
 
-var _it = it;
 describe('resolver-tests', function () {
   describe('The Promise Constructor', function () {
     it('has `Object.getPrototypeOf(promise) === Promise.prototype`', function () {

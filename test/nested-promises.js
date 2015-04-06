@@ -37,7 +37,6 @@ describe('nested promises', function () {
     var D = new Promise(function (resolve, reject) {
       resolveD = resolve;
     });
-    var Athen = A.then, Bthen = B.then, Cthen = C.then, Dthen = D.then;
     resolveA(B);
     resolveB(C);
     resolveC(D);

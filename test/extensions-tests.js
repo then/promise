@@ -6,8 +6,6 @@ var sentinel = {}
 var promise = new Promise(function (resolve) {
   resolve(sentinel)
 })
-var thenable = {then: function (fullfilled, rejected) { fullfilled(sentinel) }}
-var thenableRejected = {then: function (fullfilled, rejected) { rejected(sentinel) }}
 
 var a = {}
 var b = {}
