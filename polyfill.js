@@ -1,3 +1,5 @@
+/*jshint strict:false */
+/*global Promise:true */
 // not "use strict" so we can declare global "Promise"
 
 var asap = require('asap');

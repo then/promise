@@ -1,3 +1,4 @@
+/*jshint strict:false*/
 // should work in any browser without browserify
 
 if (typeof Promise.prototype.done !== 'function') {
