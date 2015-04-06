@@ -8,6 +8,7 @@ For detailed tutorials on its use, see www.promisejs.org
 [![travis][travis-image]][travis-url]
 [![dep][dep-image]][dep-url]
 [![npm][npm-image]][npm-url]
+[![downloads][downloads-image]][downloads-url]
 
 [travis-image]: https://img.shields.io/travis/then/promise.svg?style=flat
 [travis-url]: https://travis-ci.org/then/promise
@@ -15,6 +16,8 @@ For detailed tutorials on its use, see www.promisejs.org
 [dep-url]: https://gemnasium.com/then/promise
 [npm-image]: https://img.shields.io/npm/v/promise.svg?style=flat
 [npm-url]: https://npmjs.org/package/promise
+[downloads-image]: https://img.shields.io/npm/dm/promise.svg?style=flat
+[downloads-url]: https://npmjs.org/package/promise
 
 ## Installation
 
