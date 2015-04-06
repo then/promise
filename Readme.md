@@ -5,9 +5,16 @@ This is a simple implementation of Promises.  It is a super set of ES6 Promises 
 
 For detailed tutorials on its use, see www.promisejs.org
 
-[![Build Status](https://img.shields.io/travis/then/promise/master.svg)](https://travis-ci.org/then/promise)
-[![Dependency Status](https://img.shields.io/gemnasium/then/promise.svg)](https://gemnasium.com/then/promise)
-[![NPM version](https://img.shields.io/npm/v/promise.svg)](https://www.npmjs.org/package/promise)
+[![travis][travis-image]][travis-url]
+[![dep][dep-image]][dep-url]
+[![npm][npm-image]][npm-url]
+
+[travis-image]: https://img.shields.io/travis/then/promise.svg?style=flat
+[travis-url]: https://travis-ci.org/then/promise
+[dep-image]: https://img.shields.io/gemnasium/then/promise.svg?style=flat
+[dep-url]: https://gemnasium.com/then/promise
+[npm-image]: https://img.shields.io/npm/v/promise.svg?style=flat
+[npm-url]: https://npmjs.org/package/promise
 
 ## Installation
 
