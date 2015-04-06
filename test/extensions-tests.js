@@ -1,3 +1,4 @@
+'use strict'
 var assert = require('better-assert')
 var Promise = require('../')
 var sentinel = {}
