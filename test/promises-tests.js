@@ -1,4 +1,4 @@
-var tests = require('promises-aplus-tests');
-var adapter = require('./adapter-a');
+var tests = require('promises-aplus-tests')
+var adapter = require('./adapter-a')
 
-tests.mocha(adapter);
+tests.mocha(adapter)
