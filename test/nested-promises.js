@@ -54,8 +54,8 @@ describe('nested promises', function () {
         resolveFns.push(resolve);
       }));
     }
-    for (var i = 0; i < 99; i++) {
-      resolveFns[i](promises[i + 1]);
+    for (var j = 0; j < 99; j++) {
+      resolveFns[j](promises[j + 1]);
     }
     resolveFns[99]('foo');
     promises[0].done(function (result) {
