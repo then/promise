@@ -4,10 +4,11 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 200 --slow 99999 -R dot && npm run test-memory-leak",
+    "test": "mocha --timeout 200 --slow 99999 -R dot && npm run test-memory-leak && npm run lint",
     "test-resolve": "mocha test/resolver-tests.js --timeout 200 --slow 999999",
     "test-extensions": "mocha test/extensions-tests.js --timeout 200 --slow 999999",
-    "test-memory-leak": "node --expose-gc test/memory-leak.js"
+    "test-memory-leak": "node --expose-gc test/memory-leak.js",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,8 @@
   "devDependencies": {
     "promises-aplus-tests": "*",
     "better-assert": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "standard": "^3.3.2"
   },
   "dependencies": {
     "asap": "~2.0.1"

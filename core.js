@@ -1,5 +1,5 @@
-'use strict';
+'use strict'
 
-module.exports = require('./lib/core.js');
+module.exports = require('./lib/core.js')
 
-console.error('require("promise/core") is deprecated, use require("promise/lib/core") instead.');
+console.error('require("promise/core") is deprecated, use require("promise/lib/core") instead.')

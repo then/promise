@@ -1,11 +1,13 @@
-var assert = require('better-assert');
-var Promise = require('../');
-var sentinel = {};
+'use strict'
+/*global describe:true, it:true, done:true */
+var assert = require('better-assert')
+var Promise = require('../')
+var sentinel = {}
 var promise = new Promise(function (resolve) {
-  resolve(sentinel);
-});
+  resolve(sentinel)
+})
 
-var _it = it;
+function noop () {}
 describe('resolver-tests', function () {
   describe('The Promise Constructor', function () {
     it('has `Object.getPrototypeOf(promise) === Promise.prototype`', function () {
@@ -23,7 +25,7 @@ describe('resolver-tests', function () {
     describe('if resolver is not a function', function () {
       it('must throw a `TypeError`', function () {
         try {
-          new Promise({})
+          noop(new Promise({}))
         } catch (ex) {
           assert(ex instanceof TypeError)
           return
@@ -32,18 +34,18 @@ describe('resolver-tests', function () {
       })
     })
     describe('if resolver is a function', function () {
-      it('must be called with the promise\'s resolver arguments', function () {
-        new Promise(function (resolve, reject) {
+      it("must be called with the promise's resolver arguments", function () {
+        noop(new Promise(function (resolve, reject) {
           assert(typeof resolve === 'function')
           assert(typeof reject === 'function')
-          done();
-        })
+          done()
+        }))
       })
       it('must be called immediately, before `Promise` returns', function () {
-        var called = false;
-        new Promise(function (resolve, reject) {
-          called = true;
-        })
+        var called = false
+        noop(new Promise(function (resolve, reject) {
+          called = true
+        }))
         assert(called)
       })
     })
@@ -54,42 +56,40 @@ describe('resolver-tests', function () {
             setTimeout(function () {
               onComplete(sentinel)
             }, 50)
-          }};
+          }}
           new Promise(function (resolve) {
             process.nextTick(function () {
               resolve(thenable)
               resolve(null)
-            });
+            })
           })
-          .then(function (result) {
-            assert(result === sentinel)
-          })
-          .then(function () {
-            done()
-          }, function (err) {
-            done(err || new Error('Promise rejected'));
-          })
+            .then(function (result) {
+              assert(result === sentinel)
+            })
+            .then(function () {
+              done()
+            }, function (err) {
+              done(err || new Error('Promise rejected'))
+            })
         })
       })
       describe('otherwise', function () {
         describe('if x is a thenable', function () {
-          it('assimilates the thenable', function () {
-
-          })
+          it('assimilates the thenable', function () {})
         })
         describe('otherwise', function () {
           it('is fulfilled with x as the fulfillment value', function (done) {
             new Promise(function (resolve, reject) {
               resolve(sentinel)
             })
-            .then(function (fulfillmentValue) {
-              assert(fulfillmentValue === sentinel)
-            })
-            .then(function () {
-              done()
-            }, function (err) {
-              done(err || new Error('Promise rejected'));
-            })
+              .then(function (fulfillmentValue) {
+                assert(fulfillmentValue === sentinel)
+              })
+              .then(function () {
+                done()
+              }, function (err) {
+                done(err || new Error('Promise rejected'))
+              })
           })
         })
       })
@@ -101,21 +101,21 @@ describe('resolver-tests', function () {
             setTimeout(function () {
               onComplete(sentinel)
             }, 50)
-          }};
+          }}
           new Promise(function (resolve, reject) {
             process.nextTick(function () {
               resolve(thenable)
               reject('foo')
-            });
+            })
           })
-          .then(function (result) {
-            assert(result === sentinel)
-          })
-          .then(function () {
-            done()
-          }, function (err) {
-            done(err || new Error('Promise rejected'));
-          })
+            .then(function (result) {
+              assert(result === sentinel)
+            })
+            .then(function () {
+              done()
+            }, function (err) {
+              done(err || new Error('Promise rejected'))
+            })
         })
       })
       describe('otherwise', function () {
@@ -123,14 +123,14 @@ describe('resolver-tests', function () {
           new Promise(function (resolve, reject) {
             reject(sentinel)
           })
-          .then(null, function (rejectionReason) {
-            assert(rejectionReason === sentinel)
-          })
-          .then(function () {
-            done()
-          }, function (err) {
-            done(err || new Error('Promise rejected'));
-          })
+            .then(null, function (rejectionReason) {
+              assert(rejectionReason === sentinel)
+            })
+            .then(function () {
+              done()
+            }, function (err) {
+              done(err || new Error('Promise rejected'))
+            })
         })
       })
     })
@@ -142,19 +142,19 @@ describe('resolver-tests', function () {
           setTimeout(function () {
             onComplete(sentinel)
           }, 50)
-        }};
+        }}
         new Promise(function (resolve, reject) {
           resolve(thenable)
-          throw new Error('foo');
+          throw new Error('foo')
         })
-        .then(function (result) {
-          assert(result === sentinel)
-        })
-        .then(function () {
-          done()
-        }, function (err) {
-          done(err || new Error('Promise rejected'));
-        })
+          .then(function (result) {
+            assert(result === sentinel)
+          })
+          .then(function () {
+            done()
+          }, function (err) {
+            done(err || new Error('Promise rejected'))
+          })
       })
     })
     describe('otherwise', function () {
@@ -162,14 +162,14 @@ describe('resolver-tests', function () {
         new Promise(function (resolve, reject) {
           throw sentinel
         })
-        .then(null, function (rejectionReason) {
-          assert(rejectionReason === sentinel)
-        })
-        .then(function () {
-          done()
-        }, function (err) {
-          done(err || new Error('Promise rejected'));
-        })
+          .then(null, function (rejectionReason) {
+            assert(rejectionReason === sentinel)
+          })
+          .then(function () {
+            done()
+          }, function (err) {
+            done(err || new Error('Promise rejected'))
+          })
       })
     })
   })

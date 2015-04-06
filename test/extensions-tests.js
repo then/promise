@@ -1,11 +1,11 @@
+'use strict'
+/*global describe:true, it:true */
 var assert = require('better-assert')
 var Promise = require('../')
 var sentinel = {}
 var promise = new Promise(function (resolve) {
   resolve(sentinel)
 })
-var thenable = {then: function (fullfilled, rejected) { fullfilled(sentinel) }}
-var thenableRejected = {then: function (fullfilled, rejected) { rejected(sentinel) }}
 
 var a = {}
 var b = {}
@@ -21,7 +21,7 @@ var rejected = new Promise(function (resolve, reject) { reject(rejection) })
 describe('extensions', function () {
   describe('Promise.denodeify(fn, [argumentCount])', function () {
     it('returns a function that uses promises instead of callbacks', function (done) {
-      function wrap(val, key, callback) {
+      function wrap (val, key, callback) {
         return callback(null, {val: val, key: key})
       }
       var pwrap = Promise.denodeify(wrap)
@@ -33,7 +33,7 @@ describe('extensions', function () {
         })
     })
     it('converts callback error arguments into rejection', function (done) {
-      function fail(val, key, callback) {
+      function fail (val, key, callback) {
         return callback(sentinel)
       }
       var pfail = Promise.denodeify(fail)
@@ -44,7 +44,7 @@ describe('extensions', function () {
         })
     })
     it('with an argumentCount it ignores extra arguments', function (done) {
-      function wrap(val, key, callback) {
+      function wrap (val, key, callback) {
         return callback(null, {val: val, key: key})
       }
       var pwrap = Promise.denodeify(wrap, 2)
@@ -56,8 +56,8 @@ describe('extensions', function () {
         })
     })
     it('resolves correctly when the wrapped function returns a promise anyway', function (done) {
-      function wrap(val, key, callback) {
-        return new Promise(function(resolve, reject) {
+      function wrap (val, key, callback) {
+        return new Promise(function (resolve, reject) {
           resolve({val: val, key: key})
         })
       }
@@ -96,7 +96,7 @@ describe('extensions', function () {
       })
       add(1, 2, function (err, res) {
         assert(err === sentinel)
-        add2(1, 2, function (err, res){
+        add2(1, 2, function (err, res) {
           assert(err === sentinel)
           done()
         })
@@ -123,7 +123,7 @@ describe('extensions', function () {
             return a + b
           })
       })
-      add.call(ctx, 1, 2, function (err, res) {
+      add.call(ctx, 1, 2, function (_err, res) {
         assert(res === 3)
         assert(this === ctx)
         done()
@@ -140,7 +140,7 @@ describe('extensions', function () {
             assert(Array.isArray(res))
             assert(res.length === 0)
           })
-          .nodeify(done)
+            .nodeify(done)
         })
       })
       describe('of objects', function () {
@@ -153,7 +153,7 @@ describe('extensions', function () {
             assert(res[1] === b)
             assert(res[2] === c)
           })
-          .nodeify(done)
+            .nodeify(done)
         })
       })
       describe('of promises', function () {
@@ -166,7 +166,7 @@ describe('extensions', function () {
             assert(res[1] === b)
             assert(res[2] === c)
           })
-          .nodeify(done)
+            .nodeify(done)
         })
       })
       describe('of mixed values', function () {
@@ -179,7 +179,7 @@ describe('extensions', function () {
             assert(res[1] === b)
             assert(res[2] === c)
           })
-          .nodeify(done)
+            .nodeify(done)
         })
       })
       describe('containing at least one rejected promise', function () {
@@ -189,10 +189,10 @@ describe('extensions', function () {
           res.then(function (res) {
             throw new Error('Should be rejected')
           },
-          function (err) {
-            assert(err === rejection)
-          })
-          .nodeify(done)
+            function (err) {
+              assert(err === rejection)
+            })
+            .nodeify(done)
         })
       })
     })
@@ -200,15 +200,15 @@ describe('extensions', function () {
 
   describe('promise.done(onFulfilled, onRejected)', function () {
     it.skip('behaves like then except for not returning anything', function () {
-      //todo
+      // todo
     })
     it.skip('rethrows unhandled rejections', function () {
-      //todo
+      // todo
     })
   })
   describe('promise.nodeify(callback)', function () {
     it('converts a promise returning function into a callback function', function (done) {
-      function add(a, b, callback) {
+      function add (a, b, callback) {
         return Promise.resolve(a)
           .then(function (a) {
             return a + b
@@ -222,7 +222,7 @@ describe('extensions', function () {
       })
     })
     it('converts rejected promises into the first argument of the callback', function (done) {
-      function add(a, b, callback) {
+      function add (a, b, callback) {
         return Promise.resolve(a)
           .then(function (a) {
             throw sentinel
@@ -235,7 +235,7 @@ describe('extensions', function () {
       })
     })
     it('passes through when no callback is provided', function (done) {
-      function add(a, b, callback) {
+      function add (a, b, callback) {
         return Promise.resolve(a)
           .then(function (a) {
             return a + b
@@ -250,14 +250,14 @@ describe('extensions', function () {
     })
     it('accepts a `context` argument', function (done) {
       var ctx = {}
-      function add(a, b, callback) {
+      function add (a, b, callback) {
         return Promise.resolve(a)
           .then(function (a) {
             return a + b
           })
           .nodeify(callback, ctx)
       }
-      add(1, 2, function (err, res) {
+      add(1, 2, function (_err, res) {
         assert(res === 3)
         assert(this === ctx)
         done()
@@ -267,7 +267,7 @@ describe('extensions', function () {
 
   describe('inheritance', function () {
     it('allows its prototype methods to act upon foreign constructors', function () {
-      function Awesome(fn) {
+      function Awesome (fn) {
         if (!(this instanceof Awesome)) return new Awesome(fn)
         Promise.call(this, fn)
       }
