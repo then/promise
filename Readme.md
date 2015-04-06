@@ -9,6 +9,7 @@ For detailed tutorials on its use, see www.promisejs.org
 [![dep][dep-image]][dep-url]
 [![npm][npm-image]][npm-url]
 [![downloads][downloads-image]][downloads-url]
+[![code-style][code-style-image]][code-style-url]
 
 [travis-image]: https://img.shields.io/travis/then/promise.svg?style=flat
 [travis-url]: https://travis-ci.org/then/promise
@@ -18,6 +19,8 @@ For detailed tutorials on its use, see www.promisejs.org
 [npm-url]: https://npmjs.org/package/promise
 [downloads-image]: https://img.shields.io/npm/dm/promise.svg?style=flat
 [downloads-url]: https://npmjs.org/package/promise
+[code-style-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
+[code-style-url]: https://github.com/feross/standard
 
 ## Installation
 
