@@ -44,14 +44,14 @@ Note that the [es5-shim](https://github.com/es-shims/es5-shim) must be loaded be
 The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
 
 ```javascript
-var Promise = require('promise');
+var Promise = require('promise')
 
 var promise = new Promise(function (resolve, reject) {
   get('http://www.google.com', function (err, res) {
-    if (err) reject(err);
-    else resolve(res);
-  });
-});
+    if (err) reject(err)
+    else resolve(res)
+  })
+})
 ```
 
 ## API
@@ -59,7 +59,7 @@ var promise = new Promise(function (resolve, reject) {
 Before all examples, you will need:
 
 ```js
-var Promise = require('promise');
+var Promise = require('promise')
 ```
 
 ### new Promise(resolver)
@@ -179,20 +179,20 @@ People who use typical node.js style callbacks will be able to just pass a callb
   You can use inheritance if you want to create your own complete promise library with this as your basic starting point, perfect if you have lots of cool features you want to add.  Here is an example of a promise library called `Awesome`, which is built on top of `Promise` correctly.
 
 ```javascript
-var Promise = require('promise');
+var Promise = require('promise')
 function Awesome(fn) {
-  if (!(this instanceof Awesome)) return new Awesome(fn);
-  Promise.call(this, fn);
+  if (!(this instanceof Awesome)) return new Awesome(fn)
+  Promise.call(this, fn)
 }
-Awesome.prototype = Object.create(Promise.prototype);
-Awesome.prototype.constructor = Awesome;
+Awesome.prototype = Object.create(Promise.prototype)
+Awesome.prototype.constructor = Awesome
 
 //Awesome extension
 Awesome.prototype.spread = function (cb) {
   return this.then(function (arr) {
-    return cb.apply(this, arr);
+    return cb.apply(this, arr)
   })
-};
+}
 ```
 
   N.B. if you fail to set the prototype and constructor properly or fail to do Promise.call, things can fail in really subtle ways.
@@ -203,16 +203,16 @@ Awesome.prototype.spread = function (cb) {
 
 ```javascript
 function Uber(fn) {
-  if (!(this instanceof Uber)) return new Uber(fn);
-  var _prom = new Promise(fn);
-  this.then = _prom.then;
+  if (!(this instanceof Uber)) return new Uber(fn)
+  var _prom = new Promise(fn)
+  this.then = _prom.then
 }
 
 Uber.prototype.spread = function (cb) {
   return this.then(function (arr) {
-    return cb.apply(this, arr);
+    return cb.apply(this, arr)
   })
-};
+}
 ```
 
 ### Extending the Prototype
