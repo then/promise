@@ -123,7 +123,7 @@ describe('extensions', function () {
             return a + b
           })
       })
-      add.call(ctx, 1, 2, function (err, res) {
+      add.call(ctx, 1, 2, function (_err, res) {
         assert(res === 3)
         assert(this === ctx)
         done()
@@ -257,7 +257,7 @@ describe('extensions', function () {
           })
           .nodeify(callback, ctx)
       }
-      add(1, 2, function (err, res) {
+      add(1, 2, function (_err, res) {
         assert(res === 3)
         assert(this === ctx)
         done()
