@@ -7,6 +7,7 @@ var promise = new Promise(function (resolve) {
   resolve(sentinel);
 });
 
+function noop () {}
 describe('resolver-tests', function () {
   describe('The Promise Constructor', function () {
     it('has `Object.getPrototypeOf(promise) === Promise.prototype`', function () {
@@ -24,7 +25,7 @@ describe('resolver-tests', function () {
     describe('if resolver is not a function', function () {
       it('must throw a `TypeError`', function () {
         try {
-          new Promise({})
+          noop(new Promise({}))
         } catch (ex) {
           assert(ex instanceof TypeError)
           return
@@ -34,17 +35,17 @@ describe('resolver-tests', function () {
     })
     describe('if resolver is a function', function () {
       it('must be called with the promise\'s resolver arguments', function () {
-        new Promise(function (resolve, reject) {
+        noop(new Promise(function (resolve, reject) {
           assert(typeof resolve === 'function')
           assert(typeof reject === 'function')
           done();
-        })
+        }))
       })
       it('must be called immediately, before `Promise` returns', function () {
         var called = false;
-        new Promise(function (resolve, reject) {
+        noop(new Promise(function (resolve, reject) {
           called = true;
-        })
+        }))
         assert(called)
       })
     })
