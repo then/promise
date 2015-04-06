@@ -1,4 +1,5 @@
 'use strict'
+/*global describe:true, it:true, done:true */
 var assert = require('better-assert');
 var Promise = require('../');
 var sentinel = {};

@@ -1,5 +1,5 @@
 'use strict';
-
+/*global describe:true, it:true */
 var assert = require('assert');
 var Promise = require('../');
 
