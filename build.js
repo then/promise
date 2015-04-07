@@ -48,3 +48,22 @@ fs.readdirSync(__dirname + '/src').forEach(function (filename) {
   var out = fixup(src);
   fs.writeFileSync(__dirname + '/lib/' + filename, out);
 });
+
+rimraf.sync(__dirname + '/domains/');
+fs.mkdirSync(__dirname + '/domains/');
+fs.readdirSync(__dirname + '/src').forEach(function (filename) {
+  var src = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
+  var out = fixup(src);
+  out = out.replace(/require\(\'asap\/raw\'\)/g, "require('asap')");
+  fs.writeFileSync(__dirname + '/domains/' + filename, out);
+});
+
+rimraf.sync(__dirname + '/setimmediate/');
+fs.mkdirSync(__dirname + '/setimmediate/');
+fs.readdirSync(__dirname + '/src').forEach(function (filename) {
+  var src = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
+  var out = fixup(src);
+  out = out.replace(/var asap \= require\(\'([a-z\/]+)\'\)/g, '');
+  out = out.replace(/asap/g, "setImmediate");
+  fs.writeFileSync(__dirname + '/setimmediate/' + filename, out);
+});
