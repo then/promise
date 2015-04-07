@@ -4,6 +4,17 @@ var asap = require('asap/raw')
 
 function noop() {};
 
+var thenError = null;
+var IS_ERROR = {};
+function getThen(obj) {
+  try {
+    return obj.then;
+  } catch (ex) {
+    thenError = ex;
+    return IS_ERROR;
+  }
+}
+
 module.exports = Promise;
 function Promise(fn) {
   if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
@@ -57,31 +68,34 @@ Promise.prototype._handle = function(deferred) {
   });
 };
 Promise.prototype._resolve = function(newValue) {
-  try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-    if (newValue === this) throw new TypeError('A promise cannot be resolved with itself.')
-    if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-      if (
-        newValue instanceof Promise &&
-        newValue._handle === this._handle &&
-        newValue.then === this.then
-      ) {
-        this._state = 3;
-        this._value = newValue;
-        for (var i = 0; i < this._deferreds.length; i++) {
-          newValue._handle(this._deferreds[i]);
-        }
-        return;
-      }
-      var then = newValue.then
-      if (typeof then === 'function') {
-        doResolve(then.bind(newValue), this)
-        return
-      }
+  //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+  if (newValue === this) {
+    return this._reject(new TypeError('A promise cannot be resolved with itself.'))
+  }
+  if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+    var then = getThen(newValue);
+    if (then === IS_ERROR) {
+      return this._reject(thenError);
     }
-    this._state = 1
-    this._value = newValue
-    this._finale()
-  } catch (e) { this._reject(e) }
+    if (
+      then === this.then &&
+      newValue instanceof Promise &&
+      newValue._handle === this._handle
+    ) {
+      this._state = 3;
+      this._value = newValue;
+      for (var i = 0; i < this._deferreds.length; i++) {
+        newValue._handle(this._deferreds[i]);
+      }
+      return;
+    } else if (typeof then === 'function') {
+      doResolve(then.bind(newValue), this)
+      return
+    }
+  }
+  this._state = 1
+  this._value = newValue
+  this._finale()
 }
 
 Promise.prototype._reject = function (newValue) {
