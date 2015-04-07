@@ -4,7 +4,11 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 200 --slow 99999 -R dot && npm run test-memory-leak",
+    "pretest": "node build",
+    "pretest-resolve": "node build",
+    "pretest-extensions": "node build",
+    "pretest-memory-leak": "node build",
+    "test": "mocha --bail --timeout 200 --slow 99999 -R dot && npm run test-memory-leak",
     "test-resolve": "mocha test/resolver-tests.js --timeout 200 --slow 999999",
     "test-extensions": "mocha test/extensions-tests.js --timeout 200 --slow 999999",
     "test-memory-leak": "node --expose-gc test/memory-leak.js"
@@ -16,9 +20,11 @@
   "author": "ForbesLindesay",
   "license": "MIT",
   "devDependencies": {
-    "promises-aplus-tests": "*",
+    "acorn": "^1.0.1",
     "better-assert": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "promises-aplus-tests": "*",
+    "rimraf": "^2.3.2"
   },
   "dependencies": {
     "asap": "~2.0.1"

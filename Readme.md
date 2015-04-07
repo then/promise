@@ -5,6 +5,8 @@ This is a simple implementation of Promises.  It is a super set of ES6 Promises 
 
 For detailed tutorials on its use, see www.promisejs.org
 
+**N.B.** This promise exposes internals via underscore (`_`) prefixed properties.  If you use these, your code will break with each new release.
+
 [![travis][travis-image]][travis-url]
 [![dep][dep-image]][dep-url]
 [![npm][npm-image]][npm-url]
@@ -169,55 +171,6 @@ function awesomeAPI(foo, bar, callback) {
 ```
 
 People who use typical node.js style callbacks will be able to just pass a callback and get the expected behavior.  The enlightened people can not pass a callback and will get awesome promises.
-
-## Extending Promises
-
-  There are three options for extending the promises created by this library.
-
-### Inheritance
-
-  You can use inheritance if you want to create your own complete promise library with this as your basic starting point, perfect if you have lots of cool features you want to add.  Here is an example of a promise library called `Awesome`, which is built on top of `Promise` correctly.
-
-```javascript
-var Promise = require('promise');
-function Awesome(fn) {
-  if (!(this instanceof Awesome)) return new Awesome(fn);
-  Promise.call(this, fn);
-}
-Awesome.prototype = Object.create(Promise.prototype);
-Awesome.prototype.constructor = Awesome;
-
-//Awesome extension
-Awesome.prototype.spread = function (cb) {
-  return this.then(function (arr) {
-    return cb.apply(this, arr);
-  })
-};
-```
-
-  N.B. if you fail to set the prototype and constructor properly or fail to do Promise.call, things can fail in really subtle ways.
-
-### Wrap
-
-  This is the nuclear option, for when you want to start from scratch.  It ensures you won't be impacted by anyone who is extending the prototype (see below).
-
-```javascript
-function Uber(fn) {
-  if (!(this instanceof Uber)) return new Uber(fn);
-  var _prom = new Promise(fn);
-  this.then = _prom.then;
-}
-
-Uber.prototype.spread = function (cb) {
-  return this.then(function (arr) {
-    return cb.apply(this, arr);
-  })
-};
-```
-
-### Extending the Prototype
-
-  In general, you should never extend the prototype of this promise implimenation because your extensions could easily conflict with someone elses extensions.  However, this organisation will host a library of extensions which do not conflict with each other, so you can safely enable any of those.  If you think of an extension that we don't provide and you want to write it, submit an issue on this repository and (if I agree) I'll set you up with a repository and give you permission to commit to it.
 
 ## License
 
