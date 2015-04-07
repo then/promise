@@ -2,7 +2,7 @@
   "name": "promise",
   "repo": "then/promise",
   "description": "Bare bones Promises/A+ implementation",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "keywords": [],
   "dependencies": {
     "johntron/asap": "*"
