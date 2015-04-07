@@ -43,7 +43,7 @@ Note that the [es5-shim](https://github.com/es-shims/es5-shim) must be loaded be
 
 ## Usage
 
-The example below shows how you can load the promise library (in a way that works on both client and server).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
+The example below shows how you can load the promise library (in a way that works on both client and server using node or browserify).  It then demonstrates creating a promise from scratch.  You simply call `new Promise(fn)`.  There is a complete specification for what is returned by this method in [Promises/A+](http://promises-aplus.github.com/promises-spec/).
 
 ```javascript
 var Promise = require('promise');
@@ -54,6 +54,26 @@ var promise = new Promise(function (resolve, reject) {
     else resolve(res);
   });
 });
+```
+
+If you need [domains](https://iojs.org/api/domain.html) support, you should instead use:
+
+```js
+var Promise = require('promise/domains');
+```
+
+If you are in an environment that implements `setImmediate` and don't want the optimisations provided by asap, you can use:
+
+```js
+var Promise = require('promise/setimmediate');
+```
+
+If you only want part of the features, e.g. just a pure ES6 polyfill:
+
+```js
+var Promise = require('promise/lib/es6-extensions');
+// or require('promise/domains/es6-extensions');
+// or require('promise/setimmediate/es6-extensions');
 ```
 
 ## API
