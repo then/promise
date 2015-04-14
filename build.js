@@ -70,8 +70,7 @@ fs.readdirSync(__dirname + '/src').forEach(function (filename) {
 
 var output = {};
 fs.readdirSync(__dirname + '/src').forEach(function (filename) {
-  var src = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
-  var out = fixup(src);
+  var out = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
   out = out.replace(/var asap \= require\(\'([a-z\/]+)\'\);/g, '');
   out = out.replace(/asap/g, 'setImmediate');
 
