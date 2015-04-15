@@ -63,7 +63,45 @@ fs.mkdirSync(__dirname + '/setimmediate/');
 fs.readdirSync(__dirname + '/src').forEach(function (filename) {
   var src = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
   var out = fixup(src);
-  out = out.replace(/var asap \= require\(\'([a-z\/]+)\'\)/g, '');
-  out = out.replace(/asap/g, "setImmediate");
+  out = out.replace(/var asap \= require\(\'([a-z\/]+)\'\);/g, '');
+  out = out.replace(/asap/g, 'setImmediate');
   fs.writeFileSync(__dirname + '/setimmediate/' + filename, out);
 });
+
+var output = {};
+fs.readdirSync(__dirname + '/src').forEach(function (filename) {
+  var src = fs.readFileSync(__dirname + '/src/' + filename, 'utf8');
+  var out = fixup(src);
+  out = out.replace(/var asap \= require\(\'([a-z\/]+)\'\);/g, '');
+  out = out.replace(/asap/g, 'setImmediate');
+
+  out = out.replace(/var (.*?) \= require\(\'(.*?)\'\);/g, '');
+  out = out.replace(/module\.exports = Promise;/g, '');
+  out = out.replace(/'use strict';/g, '');
+
+  output[filename] = out;
+});
+
+var config = JSON.parse(fs.readFileSync(__dirname + '/package.json', 'utf8'));
+
+var code = [
+  '// then/promise version: ' + config.version + '\n',
+  "'use strict';\n\n",
+  "var setImmediate = require('setImmediate');\n",
+  [
+    'core.js',
+    'done.js',
+    'finally.js',
+    'es6-extensions.js'
+  ].reduce(function(src, file) {
+    return src + output[file];
+  }, ''),
+  'module.exports = Promise;\n'
+].join('');
+
+rimraf.sync(__dirname + '/single-browser/');
+fs.mkdirSync(__dirname + '/single-browser/');
+fs.writeFileSync(
+  __dirname + '/single-browser/promise.js',
+  code.replace(/\n\n+/g, '\n\n')
+);

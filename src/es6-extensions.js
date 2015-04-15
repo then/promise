@@ -1,6 +1,6 @@
 'use strict';
 
-//This file contains the ES6 extensions to the core Promises/A+ API
+// This file contains the ES6 extensions to the core Promises/A+ API
 
 var Promise = require('./core.js')
 var asap = require('asap/raw')
