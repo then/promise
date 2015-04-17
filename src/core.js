@@ -1,8 +1,8 @@
 'use strict';
 
-var asap = require('asap/raw')
+var asap = require('asap/raw');
 
-function noop() {};
+function noop() {}
 
 // States:
 //
@@ -51,8 +51,12 @@ function tryCallTwo(fn, a, b) {
 
 module.exports = Promise;
 function Promise(fn) {
-  if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
-  if (typeof fn !== 'function') throw new TypeError('not a function')
+  if (typeof this !== 'object') {
+    throw new TypeError('Promises must be constructed via new');
+  }
+  if (typeof fn !== 'function') {
+    throw new TypeError('not a function');
+  }
   this._state = 0;
   this._value = null;
   this._deferreds = [];
@@ -68,7 +72,9 @@ Promise.prototype._safeThen = function (onFulfilled, onRejected) {
   });
 };
 Promise.prototype.then = function(onFulfilled, onRejected) {
-  if (this.constructor !== Promise) return this._safeThen(onFulfilled, onRejected);
+  if (this.constructor !== Promise) {
+    return this._safeThen(onFulfilled, onRejected);
+  }
   var res = new Promise(noop);
   this._handle(new Handler(onFulfilled, onRejected, res));
   return res;
@@ -85,25 +91,35 @@ Promise.prototype._handle = function(deferred) {
   var state = this._state;
   var value = this._value;
   asap(function() {
-    var cb = state === 1 ? deferred.onFulfilled : deferred.onRejected
+    var cb = state === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
-      (state === 1 ? deferred.promise._resolve(value) : deferred.promise._reject(value))
-      return
+      if (state === 1) {
+        deferred.promise._resolve(value);
+      } else {
+        deferred.promise._reject(value);
+      }
+      return;
     }
     var ret = tryCallOne(cb, value);
     if (ret === IS_ERROR) {
-      deferred.promise._reject(LAST_ERROR)
+      deferred.promise._reject(LAST_ERROR);
     } else {
-      deferred.promise._resolve(ret)
+      deferred.promise._resolve(ret);
     }
   });
 };
 Promise.prototype._resolve = function(newValue) {
-  //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+  // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
   if (newValue === this) {
-    return this._reject(new TypeError('A promise cannot be resolved with itself.'))
+    return this._reject(
+      new TypeError('A promise cannot be resolved with itself.')
+    );
   }
-  if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+  var type = (newValue && typeof newValue);
+  if (
+    newValue &&
+    (typeof newValue === 'object' || typeof newValue === 'function')
+  ) {
     var then = getThen(newValue);
     if (then === IS_ERROR) {
       return this._reject(LAST_ERROR);
@@ -120,30 +136,30 @@ Promise.prototype._resolve = function(newValue) {
       }
       return;
     } else if (typeof then === 'function') {
-      doResolve(then.bind(newValue), this)
-      return
+      doResolve(then.bind(newValue), this);
+      return;
     }
   }
-  this._state = 1
-  this._value = newValue
-  this._finale()
-}
+  this._state = 1;
+  this._value = newValue;
+  this._finale();
+};
 
 Promise.prototype._reject = function (newValue) {
-  this._state = 2
-  this._value = newValue
-  this._finale()
-}
+  this._state = 2;
+  this._value = newValue;
+  this._finale();
+};
 Promise.prototype._finale = function () {
   for (var i = 0; i < this._deferreds.length; i++)
-    this._handle(this._deferreds[i])
-  this._deferreds = null
-}
+    this._handle(this._deferreds[i]);
+  this._deferreds = null;
+};
 
 
 function Handler(onFulfilled, onRejected, promise){
-  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null
-  this.onRejected = typeof onRejected === 'function' ? onRejected : null
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
   this.promise = promise;
 }
 
@@ -156,16 +172,16 @@ function Handler(onFulfilled, onRejected, promise){
 function doResolve(fn, promise) {
   var done = false;
   var res = tryCallTwo(fn, function (value) {
-    if (done) return
-    done = true
-    promise._resolve(value)
+    if (done) return;
+    done = true;
+    promise._resolve(value);
   }, function (reason) {
-    if (done) return
-    done = true
-    promise._reject(reason)
-  })
+    if (done) return;
+    done = true;
+    promise._reject(reason);
+  });
   if (!done && res === IS_ERROR) {
-    done = true
-    promise._reject(LAST_ERROR)
+    done = true;
+    promise._reject(LAST_ERROR);
   }
 }
