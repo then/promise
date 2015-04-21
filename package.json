@@ -12,7 +12,8 @@
     "test": "mocha --bail --timeout 200 --slow 99999 -R dot && npm run test-memory-leak",
     "test-resolve": "mocha test/resolver-tests.js --timeout 200 --slow 999999",
     "test-extensions": "mocha test/extensions-tests.js --timeout 200 --slow 999999",
-    "test-memory-leak": "node --expose-gc test/memory-leak.js"
+    "test-memory-leak": "node --expose-gc test/memory-leak.js",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --bail --timeout 200 --slow 99999 -R dot"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "acorn": "^1.0.1",
     "better-assert": "*",
+    "istanbul": "^0.3.13",
     "mocha": "*",
     "promises-aplus-tests": "*",
     "rimraf": "^2.3.2"
