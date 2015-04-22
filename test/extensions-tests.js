@@ -158,15 +158,19 @@ describe('extensions', function () {
       })
       describe('of promises', function () {
         it('returns a promise for an array containing the fulfilled values', function (done) {
-          var res = Promise.all([A, B, C])
+          var d = {}
+          var resolveD
+          var res = Promise.all([A, B, C, new Promise(function (resolve) { resolveD = resolve })])
           assert(res instanceof Promise)
           res.then(function (res) {
             assert(Array.isArray(res))
             assert(res[0] === a)
             assert(res[1] === b)
             assert(res[2] === c)
+            assert(res[3] === d)
           })
           .nodeify(done)
+          resolveD(d)
         })
       })
       describe('of mixed values', function () {
@@ -193,6 +197,38 @@ describe('extensions', function () {
             assert(err === rejection)
           })
           .nodeify(done)
+        })
+      })
+      describe('containing at least one eventually rejected promise', function () {
+        it('rejects the resulting promise', function (done) {
+          var rejectB
+          var rejected = new Promise(function (resolve, reject) { rejectB = reject })
+          var res = Promise.all([A, rejected, C])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            throw new Error('Should be rejected')
+          },
+          function (err) {
+            assert(err === rejection)
+          })
+          .nodeify(done)
+          rejectB(rejection)
+        })
+      })
+      describe('with a promise that resolves twice', function () {
+        it('still waits for all the other promises', function (done) {
+          var fakePromise = {then: function (onFulfilled) { onFulfilled(1); onFulfilled(2) }}
+          var eventuallyRejected = {then: function (_, onRejected) { this.onRejected = onRejected }}
+          var res = Promise.all([fakePromise, eventuallyRejected])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            throw new Error('Should be rejected')
+          },
+          function (err) {
+            assert(err === rejection)
+          })
+          .nodeify(done)
+          eventuallyRejected.onRejected(rejection);
         })
       })
     })
