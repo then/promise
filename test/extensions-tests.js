@@ -231,6 +231,14 @@ describe('extensions', function () {
           eventuallyRejected.onRejected(rejection);
         })
       })
+      describe('when given a foreign promise', function () {
+        it('should provide the correct value of `this`', function (done) {
+          var p = {then: function (onFulfilled) { onFulfilled({self: this}); }};
+          Promise.all([p]).then(function (results) {
+            assert(p === results[0].self);
+          }).nodeify(done);
+        });
+      });
     })
   })
 
