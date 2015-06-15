@@ -30,6 +30,6 @@
     "rimraf": "^2.3.2"
   },
   "dependencies": {
-    "asap": "~2.0.1"
+    "asap": "~2.0.3"
   }
 }
