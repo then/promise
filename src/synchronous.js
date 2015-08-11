@@ -16,7 +16,7 @@ Promise.enableSynchronous = function () {
     return this._state == 2;
   };
 
-  Promise.prototype.value = function () {
+  Promise.prototype.getValue = function () {
     if (!this.isFulfilled()) {
       throw new Error('Cannot get a value of an unfulfilled promise.');
     }
@@ -24,11 +24,19 @@ Promise.enableSynchronous = function () {
     return this._value;
   };
 
-  Promise.prototype.reason = function () {
+  Promise.prototype.getReason = function () {
     if (!this.isRejected()) {
       throw new Error('Cannot get a rejection reason of a non-rejected promise.');
     }
 
     return this._value;
   };
+};
+
+Promise.disableSynchronous = function() {
+  Promise.prototype.isPending = undefined;
+  Promise.prototype.isFulfilled = undefined;
+  Promise.prototype.isRejected = undefined;
+  Promise.prototype.getValue = undefined;
+  Promise.prototype.getReason = undefined;
 };

@@ -70,7 +70,7 @@ describe('synchronous-inspection-tests', function () {
     setTimeout(function () {
       assert(fulfilledPromise.isFulfilled());
       assert(!fulfilledPromise.isRejected());
-      assert(fulfilledPromise.value());
+      assert(fulfilledPromise.getValue());
       assert(!fulfilledPromise.isPending());
     }, 30);
   });
@@ -102,7 +102,7 @@ describe('synchronous-inspection-tests', function () {
     setTimeout(function () {
       assert(!fulfilledPromise.isFulfilled());
       assert(fulfilledPromise.isRejected());
-      assert(!fulfilledPromise.reason());
+      assert(!fulfilledPromise.getReason());
       assert(!fulfilledPromise.isPending());
     }, 30);
   });
@@ -130,7 +130,7 @@ describe('synchronous-inspection-tests', function () {
     assert(!fulfilledPromise.isRejected());
 
     try {
-      fulfilledPromise.value();
+      fulfilledPromise.getValue();
 
       assert(false);
     }
@@ -142,7 +142,7 @@ describe('synchronous-inspection-tests', function () {
 
     setTimeout(function () {
       try {
-        fulfilledPromise.value();
+        fulfilledPromise.getValue();
 
         assert(false);
       }
@@ -175,7 +175,7 @@ describe('synchronous-inspection-tests', function () {
     assert(!fulfilledPromise.isRejected());
 
     try {
-      fulfilledPromise.reason();
+      fulfilledPromise.getReason();
 
       assert(false);
     }
@@ -187,7 +187,7 @@ describe('synchronous-inspection-tests', function () {
 
     setTimeout(function () {
       try {
-        fulfilledPromise.reason();
+        fulfilledPromise.getReason();
 
         assert(false);
       }
@@ -195,5 +195,13 @@ describe('synchronous-inspection-tests', function () {
         assert(true);
       }
     }, 30);
+  });
+
+  it('can disable synchronous inspection', function() {
+    Promise.enableSynchronous();
+    var testPromise = Promise.resolve('someValue');
+    assert(testPromise.getValue() == 'someValue');
+    Promise.disableSynchronous();
+    assert(testPromise.getValue == undefined);
   });
 });
