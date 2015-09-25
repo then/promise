@@ -246,6 +246,7 @@ describe('extensions', function () {
     it.skip('behaves like then except for not returning anything', function () {
       //todo
     })
+
     it ('rethrows unhandled rejections', function (done) {
       var originalTimeout = global.setTimeout
 
@@ -254,9 +255,10 @@ describe('extensions', function () {
           callback()
         } catch (x) {
           assert(x.message === 'It worked')
+          global.setTimeout = originalTimeout
+          return done()
         }
-        global.setTimeout = originalTimeout
-        done()
+        done(new Error('Callback should have thrown an exception'))
       }
 
       Promise.resolve().done(function() {
