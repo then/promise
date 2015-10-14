@@ -246,8 +246,24 @@ describe('extensions', function () {
     it.skip('behaves like then except for not returning anything', function () {
       //todo
     })
-    it.skip('rethrows unhandled rejections', function () {
-      //todo
+
+    it ('rethrows unhandled rejections', function (done) {
+      var originalTimeout = global.setTimeout
+
+      global.setTimeout = function(callback) {
+        try {
+          callback()
+        } catch (x) {
+          assert(x.message === 'It worked')
+          global.setTimeout = originalTimeout
+          return done()
+        }
+        done(new Error('Callback should have thrown an exception'))
+      }
+
+      Promise.resolve().done(function() {
+        throw new Error('It worked')
+      })
     })
   })
   describe('promise.nodeify(callback)', function () {
