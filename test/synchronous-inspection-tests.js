@@ -92,7 +92,7 @@ describe('synchronous-inspection-tests', function () {
           }
           else {
             reject(false);
-          }'s'
+          }
         }
       }, 10);
     });
