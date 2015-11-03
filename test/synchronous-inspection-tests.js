@@ -218,4 +218,52 @@ describe('synchronous-inspection-tests', function () {
     Promise.disableSynchronous();
     assert(testPromise.getValue == undefined);
   });
+
+  it('can synchronously poll a resolving promise chain', function (done) {
+    Promise.enableSynchronous();
+    var fulfilledPromise = new Promise(function(resolve, reject) {
+      var interval = setTimeout(function() {
+        resolve(Promise.resolve(true));
+      }, 10);
+    });
+
+    assert(fulfilledPromise.getState() === 0);
+    assert(fulfilledPromise.isPending());
+    assert(!fulfilledPromise.isFulfilled());
+    assert(!fulfilledPromise.isRejected());
+
+    setTimeout(function() {
+      assert(fulfilledPromise.getState() === 1);
+      assert(fulfilledPromise.isFulfilled());
+      assert(!fulfilledPromise.isRejected());
+      assert(fulfilledPromise.getValue());
+      assert(!fulfilledPromise.isPending());
+
+      done();
+    }, 30);
+  });
+
+  it('can synchronously poll a rejecting promise chain', function(done) {
+    Promise.enableSynchronous();
+    var rejectedPromise = new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(Promise.reject(false));
+      }, 10);
+    });
+
+    assert(rejectedPromise.getState() === 0);
+    assert(rejectedPromise.isPending());
+    assert(!rejectedPromise.isFulfilled());
+    assert(!rejectedPromise.isRejected());
+
+    setTimeout(function() {
+      assert(rejectedPromise.getState() === 2);
+      assert(!rejectedPromise.isFulfilled());
+      assert(rejectedPromise.isRejected());
+      assert(!rejectedPromise.getReason());
+      assert(!rejectedPromise.isPending());
+
+      done();
+    }, 30);
+  });
 });
