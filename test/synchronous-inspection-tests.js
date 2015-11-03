@@ -63,6 +63,7 @@ describe('synchronous-inspection-tests', function () {
       }, 10);
     });
 
+    assert(fulfilledPromise.getState() === 0);
     assert(fulfilledPromise.isPending());
     assert(!fulfilledPromise.isFulfilled());
     assert(!fulfilledPromise.isRejected());
@@ -70,6 +71,7 @@ describe('synchronous-inspection-tests', function () {
     finished = true;
 
     setTimeout(function () {
+      assert(fulfilledPromise.getState() === 1);
       assert(fulfilledPromise.isFulfilled());
       assert(!fulfilledPromise.isRejected());
       assert(fulfilledPromise.getValue());
@@ -97,6 +99,7 @@ describe('synchronous-inspection-tests', function () {
       }, 10);
     });
 
+    assert(fulfilledPromise.getState() === 0);
     assert(fulfilledPromise.isPending());
     assert(!fulfilledPromise.isFulfilled());
     assert(!fulfilledPromise.isRejected());
@@ -104,6 +107,7 @@ describe('synchronous-inspection-tests', function () {
     finished = false;
 
     setTimeout(function () {
+      assert(fulfilledPromise.getState() === 2);
       assert(!fulfilledPromise.isFulfilled());
       assert(fulfilledPromise.isRejected());
       assert(!fulfilledPromise.getReason());
