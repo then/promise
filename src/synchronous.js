@@ -17,7 +17,7 @@ Promise.enableSynchronous = function () {
   };
 
   Promise.prototype.getValue = function () {
-    if (this._state === 3 && this._value instanceof Promise) {
+    if (this._state === 3) {
       return this._value.getValue();
     }
 
@@ -37,7 +37,7 @@ Promise.enableSynchronous = function () {
   };
 
   Promise.prototype.getState = function () {
-    if (this._state === 3 && this._value instanceof Promise) {
+    if (this._state === 3) {
       return this._value.getState();
     }
 
