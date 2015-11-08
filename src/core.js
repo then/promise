@@ -90,16 +90,16 @@ function handle(self, deferred) {
     self._deferreds.push(deferred);
     return;
   }
-  asap(function() {
-    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
-    if (cb === null) {
-      if (self._state === 1) {
-        resolve(deferred.promise, self._value);
-      } else {
-        reject(deferred.promise, self._value);
-      }
-      return;
+  var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+  if (cb === null) {
+    if (self._state === 1) {
+      resolve(deferred.promise, self._value);
+    } else {
+      reject(deferred.promise, self._value);
     }
+    return;
+  }
+  asap(function() {
     var ret = tryCallOne(cb, self._value);
     if (ret === IS_ERROR) {
       reject(deferred.promise, LAST_ERROR);
