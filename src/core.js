@@ -58,9 +58,9 @@ function Promise(fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('not a function');
   }
-  this._state = 0;
+  this._state = -1;
   this._value = null;
-  this._deferreds = [];
+  this._deferreds = null;
   if (fn === noop) return;
   doResolve(fn, this);
 }
@@ -85,6 +85,11 @@ function safeThen(self, onFulfilled, onRejected) {
 function handle(self, deferred) {
   while (self._state === 3) {
     self = self._value;
+  }
+  if (self._state === -1) {
+    self._state = 0;
+    self._deferreds = [deferred];
+    return;
   }
   if (self._state === 0) {
     self._deferreds.push(deferred);
@@ -148,10 +153,12 @@ function reject(self, newValue) {
   finale(self);
 }
 function finale(self) {
-  for (var i = 0; i < self._deferreds.length; i++) {
-    handle(self, self._deferreds[i]);
+  if (self._deferreds) {
+    for (var i = 0; i < self._deferreds.length; i++) {
+      handle(self, self._deferreds[i]);
+    }
+    self._deferreds = null;
   }
-  self._deferreds = null;
 }
 
 function Handler(onFulfilled, onRejected, promise){
