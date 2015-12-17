@@ -69,4 +69,30 @@ describe('unhandled rejections', function () {
       done();
     }, 400);
   })
+  it('tracks rejected promises', function (done) {
+    this.timeout(2300);
+    var warn = console.warn;
+    var warnings = [];
+    console.warn = function (str) {
+      warnings.push(str);
+    };
+    var expectedWarnings = [
+      'Possible Unhandled Promise Rejection (id: 0):',
+      '  my',
+      '  multi',
+      '  line',
+      '  error',
+      'Promise Rejection Handled (id: 0):',
+      '  This means you can ignore any previous messages of the form "Possible Unhandled Promise Rejection" with id 0.'
+    ];
+    tracking.enable({allRejections: true});
+    var promise = Promise.reject('my\nmulti\nline\nerror');
+    setTimeout(function () {
+      promise.done(null, function (err) {
+        console.warn = warn;
+        assert.deepEqual(warnings, expectedWarnings);
+        done();
+      });
+    }, 2100);
+  })
 })
