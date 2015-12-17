@@ -58,9 +58,10 @@ function Promise(fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('not a function');
   }
+  this._deferredState = 0;
   this._state = 0;
   this._value = null;
-  this._deferreds = [];
+  this._deferreds = null;
   if (fn === noop) return;
   doResolve(fn, this);
 }
@@ -87,9 +88,23 @@ function handle(self, deferred) {
     self = self._value;
   }
   if (self._state === 0) {
+    if (self._deferredState === 0) {
+      self._deferredState = 1;
+      self._deferreds = deferred;
+      return;
+    }
+    if (self._deferredState === 1) {
+      self._deferredState = 2;
+      self._deferreds = [self._deferreds, deferred];
+      return;
+    }
     self._deferreds.push(deferred);
     return;
   }
+  handleResolved(self, deferred);
+}
+
+function handleResolved(self, deferred) {
   asap(function() {
     var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
@@ -148,10 +163,16 @@ function reject(self, newValue) {
   finale(self);
 }
 function finale(self) {
-  for (var i = 0; i < self._deferreds.length; i++) {
-    handle(self, self._deferreds[i]);
+  if (self._deferredState === 1) {
+    handle(self, self._deferreds);
+    self._deferreds = null;
   }
-  self._deferreds = null;
+  if (self._deferredState === 2) {
+    for (var i = 0; i < self._deferreds.length; i++) {
+      handle(self, self._deferreds[i]);
+    }
+    self._deferreds = null;
+  }
 }
 
 function Handler(onFulfilled, onRejected, promise){
