@@ -4,7 +4,8 @@ var Promise = require('./core');
 
 var DEFAULT_WHITELIST = [
   ReferenceError,
-  TypeError
+  TypeError,
+  RangeError
 ];
 
 var enabled = false;
