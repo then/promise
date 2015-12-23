@@ -32,7 +32,7 @@ describe('resolver-tests', function () {
       })
     })
     describe('if resolver is a function', function () {
-      it('must be called with the promise\'s resolver arguments', function () {
+      it('must be called with the promise\'s resolver arguments', function (done) {
         new Promise(function (resolve, reject) {
           assert(typeof resolve === 'function')
           assert(typeof reject === 'function')
@@ -158,7 +158,7 @@ describe('resolver-tests', function () {
       })
     })
     describe('otherwise', function () {
-      it('is rejected with e as the rejection reason', function () {
+      it('is rejected with e as the rejection reason', function (done) {
         new Promise(function (resolve, reject) {
           throw sentinel
         })
