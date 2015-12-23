@@ -1,6 +1,6 @@
 {
   "name": "promise",
-  "version": "7.0.4",
+  "version": "7.1.1",
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
