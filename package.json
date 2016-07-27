@@ -34,6 +34,6 @@
   },
   "browser": {
     "./lib/rejection-handlers-node": "./lib/rejection-handlers-client",
-    "./lib/rejection-handlers-node.js": "./lib/rejection-handlers-client.js",
+    "./lib/rejection-handlers-node.js": "./lib/rejection-handlers-client.js"
   }
 }
