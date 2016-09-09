@@ -56,7 +56,7 @@ function Promise(fn) {
     throw new TypeError('Promises must be constructed via new');
   }
   if (typeof fn !== 'function') {
-    throw new TypeError('Promise contructor\'s argument not a function');
+    throw new TypeError('Promise constructor\'s argument is not a function');
   }
   this._deferredState = 0;
   this._state = 0;
