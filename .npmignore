@@ -5,3 +5,7 @@ test
 .travis.yml
 component.json
 coverage
+.jshintrc
+.npmignore
+/build.js
+src/
