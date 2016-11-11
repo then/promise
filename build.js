@@ -30,9 +30,6 @@ function fixup(src) {
       replace(node.property, getIdFor(node.property.name));
     }
   });
-  function source(node) {
-    return src.slice(node.start, node.end).join('');
-  }
   function replace(node, str) {
     for (var i = node.start; i < node.end; i++) {
       src[i] = '';
