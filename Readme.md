@@ -148,6 +148,47 @@ Promise.all([Promise.resolve('a'), 'b', Promise.resolve('c')])
   })
 ```
 
+#### Nested promises
+
+When nesting promises it is not necessary to provide an error handler at every level. A rejected promise will propagate the error to an error handler with the last promise. In the example below the async function increments the given value until it goes over the limit which causes the promise to be rejected and propagate the error to the last handler.
+
+```js
+var Promise = require('promise');
+
+var limit = 3;
+
+var doAsync = function(nbr) {
+    var promise = new Promise(function (resolve, reject) {
+        setTimeout(function() {
+            if (nbr <= limit) {
+                resolve(nbr+1);
+            }
+            else {
+                reject('Number is over limit: ' + nbr);
+            }
+        }, 10);
+    });
+    return promise;
+};
+
+var handleSuccess = function(result) {
+    console.log('Success: ' + result);
+};
+
+var handleError = function(error) {
+    console.log('Error: ' + error);
+};
+
+doAsync(0).then(doAsync).
+    then(doAsync).
+    then(doAsync).
+    then(doAsync).
+    then(doAsync).
+    then(doAsync).
+    then(doAsync).
+    then(handleSuccess, handleError);
+```
+
 #### Promise.denodeify(fn)
 
 _Non Standard_
