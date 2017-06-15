@@ -5,3 +5,4 @@ node_modules
 /domains
 /setimmediate
 coverage
+package-lock.json
