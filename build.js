@@ -5,16 +5,12 @@ var rimraf = require('rimraf');
 var acorn = require('acorn');
 var walk = require('acorn/dist/walk');
 
-var ids = [];
+var idx = process.env.SOURCE_DATE_EPOCH || parseInt(Math.random() * 1000, 10);
 var names = {};
 
 function getIdFor(name) {
   if (name in names) return names[name];
-  var id;
-  do {
-    id = '_' + Math.floor(Math.random() * 100);
-  } while (ids.indexOf(id) !== -1)
-  ids.push(id);
+  var id = '_' + idx++;
   names[name] = id;
   return id;
 }
