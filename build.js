@@ -4,19 +4,19 @@ var fs = require('fs');
 var rimraf = require('rimraf');
 var acorn = require('acorn');
 var walk = require('acorn/dist/walk');
+var crypto = require('crypto');
 
-var ids = [];
-var names = {};
+var shasum = crypto.createHash('sha512');
+fs.readdirSync(__dirname + '/src').sort().forEach(function (filename) {
+  shasum.update(fs.readFileSync(__dirname + '/src/' + filename, 'utf8'));
+});
 
+const names = {};
+const characterSet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let i = characterSet.indexOf(shasum.digest('base64').replace(/[^0-9a-zA-Z]/g, '')[0]);
 function getIdFor(name) {
-  if (name in names) return names[name];
-  var id;
-  do {
-    id = '_' + Math.floor(Math.random() * 100);
-  } while (ids.indexOf(id) !== -1)
-  ids.push(id);
-  names[name] = id;
-  return id;
+  if (names[name]) return names[name];
+  return names[name] = '_' + characterSet[i++ % characterSet.length]
 }
 
 function fixup(src) {
