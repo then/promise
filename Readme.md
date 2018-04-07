@@ -56,7 +56,7 @@ var promise = new Promise(function (resolve, reject) {
 });
 ```
 
-If you need [domains](https://iojs.org/api/domain.html) support, you should instead use:
+If you need [domains](https://nodejs.org/api/domain.html) support, you should instead use:
 
 ```js
 var Promise = require('promise/domains');
