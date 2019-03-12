@@ -100,7 +100,7 @@ Due to the high probability of false positives, I only recommend using this when
 
 `rejection-tracking.enable(options)` takes the following options:
 
- - allRejections (`boolean`) - track all exceptions, not just reference errors and type errors.  Note that this has a high probability of resulting in false positives if your code loads data optimisticly
+ - allRejections (`boolean`) - track all exceptions, not just reference errors and type errors.  Note that this has a high probability of resulting in false positives if your code loads data optimistically
  - whitelist (`Array<ErrorConstructor>`) - this defaults to `[ReferenceError, TypeError]` but you can override it with your own list of error constructors to track.
  - `onUnhandled(id, error)` and `onHandled(id, error)` - you can use these to provide your own customised display for errors.  Note that if possible you should indicate that the error was a false positive if `onHandled` is called.  `onHandled` is only called if `onUnhandled` has already been called.
 
