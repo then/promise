@@ -6,13 +6,21 @@ declare class ThenPromise<+R> extends Promise<R> {
     reject:  (error: any) => void
   ) => mixed): void;
 
+
+  then(onFulfill: null | void, onReject: null | void): ThenPromise<R>;
   then<U>(
-    onFulfill?: (value: R) => Promise<U> | U,
-    onReject?: (error: any) => Promise<U> | U
+    onFulfill: null | void,
+    onReject: (error: any) => Promise<U> | U
+  ): ThenPromise<R | U>;
+  then<U>(
+    onFulfill: (value: R) => Promise<U> | U,
+    onReject: null | void | ((error: any) => Promise<U> | U)
   ): ThenPromise<U>;
 
+
+  catch(onReject: null | void): ThenPromise<R>;
   catch<U>(
-    onReject?: (error: any) => Promise<U> | U
+    onReject: (error: any) => Promise<U> | U
   ): ThenPromise<R | U>;
 
   // Extensions specific to then/promise
@@ -33,8 +41,8 @@ declare class ThenPromise<+R> extends Promise<R> {
 
   static resolve<T>(object: Promise<T> | T): ThenPromise<T>;
   static reject<T>(error?: any): ThenPromise<T>;
-  static all<Elem, T:Iterable<Elem>>(promises: T): ThenPromise<$TupleMap<T, typeof $await>>;
-  static race<T, Elem: Promise<T> | T>(promises: Array<Elem>): ThenPromise<T>;
+  static all<T: Iterable<mixed>>(promises: T): ThenPromise<$TupleMap<T, typeof $await>>;
+  static race<T, Elem: Promise<T> | T>(promises: Iterable<Elem>): ThenPromise<T>;
 
   // Extensions specific to then/promise
 
