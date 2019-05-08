@@ -108,6 +108,8 @@ To reduce the chance of false-positives there is a delay of up to 2 seconds befo
 
 ## API
 
+Detailed API reference docs are available at https://www.promisejs.org/api/.
+
 Before all examples, you will need:
 
 ```js
@@ -146,6 +148,23 @@ Promise.all([Promise.resolve('a'), 'b', Promise.resolve('c')])
     assert(res[1] === 'b')
     assert(res[2] === 'c')
   })
+```
+
+#### Promise.race(array)
+
+Returns a promise that resolves or rejects with the result of the first promise to resolve/reject, e.g.
+```js
+var rejected = Promise.reject(new Error('Whatever'));
+var fulfilled = new Promise(function (resolve) {
+  setTimeout(() => resolve('success'), 500);
+});
+
+var race = Promise.race([rejected, fulfilled]);
+// => immediately rejected with `new Error('Whatever')`
+
+var success = Promise.resolve('immediate success');
+var first = Promise.race([success, fulfilled]);
+// => immediately succeeds with `immediate success`
 ```
 
 #### Promise.denodeify(fn)
