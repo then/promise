@@ -93,9 +93,20 @@ Promise.reject = function (value) {
 };
 
 Promise.race = function (values) {
+  function guard(resolverFunction) {
+    return function resolveOrReject(valueOrReason) {
+      if (!guard.resolved) {
+        guard.resolved = true;
+        resolverFunction(valueOrReason);
+      }
+    }
+  }
+  guard.resolved = false;
   return new Promise(function (resolve, reject) {
+    var guardedResolve = guard(resolve);
+    var guardedReject = guard(reject);
     values.forEach(function(value){
-      Promise.resolve(value).then(resolve, reject);
+      Promise.resolve(value).then(guardedResolve, guardedReject);
     });
   });
 };
