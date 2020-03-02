@@ -54,12 +54,12 @@ var iterableToArray = function (iterable) {
   }
 
   // ES5, only arrays and array-likes exist
-  iterableToArray = function (x) { return x; };
-  return iterable;
+  iterableToArray = function (x) { return Array.prototype.slice.call(x); };
+  return Array.prototype.slice.call(iterable);
 }
 
 Promise.all = function (arr) {
-  var args = Array.prototype.slice.call(iterableToArray(arr));
+  var args = iterableToArray(arr);
 
   return new Promise(function (resolve, reject) {
     if (args.length === 0) return resolve([]);
