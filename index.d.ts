@@ -34,6 +34,18 @@ interface ThenPromise<T> extends Promise<T> {
 	nodeify(callback: (err: Error, value: T) => void): void;
 }
 
+interface PromiseFulfilledResult<T> {
+  status: "fulfilled";
+  value: T;
+}
+
+interface PromiseRejectedResult {
+  status: "rejected";
+  reason: any;
+}
+
+type PromiseSettledResult<T> = PromiseFulfilledResult<T> | PromiseRejectedResult;
+
 interface ThenPromiseConstructor {
   /**
    * A reference to the prototype.
@@ -47,6 +59,86 @@ interface ThenPromiseConstructor {
    * and a reject callback used to reject the promise with a provided reason or error.
    */
   new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => any): ThenPromise<T>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>, PromiseSettledResult<T6>, PromiseSettledResult<T7>, PromiseSettledResult<T8>, PromiseSettledResult<T9>, PromiseSettledResult<T10>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>, PromiseSettledResult<T6>, PromiseSettledResult<T7>, PromiseSettledResult<T8>, PromiseSettledResult<T9>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>, PromiseSettledResult<T6>, PromiseSettledResult<T7>, PromiseSettledResult<T8>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>, PromiseSettledResult<T6>, PromiseSettledResult<T7>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>, PromiseSettledResult<T6>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>, PromiseSettledResult<T5>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>, PromiseSettledResult<T4>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>, PromiseSettledResult<T3>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): ThenPromise<[PromiseSettledResult<T1>, PromiseSettledResult<T2>]>;
+
+  /**
+   * Creates a Promise that is resolved with an array of results when all
+   * of the provided Promises resolve or reject.
+   * @param values An array of Promises.
+   * @returns A new Promise.
+   */
+  allSettled<T>(values: (T | PromiseLike<T>)[]): ThenPromise<PromiseSettledResult<T>[]>;
 
   /**
    * Creates a ThenPromise that is resolved with an array of results when all of the provided Promises

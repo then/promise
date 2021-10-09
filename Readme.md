@@ -150,6 +150,19 @@ Promise.all([Promise.resolve('a'), 'b', Promise.resolve('c')])
   })
 ```
 
+#### Promise.allSettled(array)
+
+Returns a promise that resolves after all of the given promises have either fulfilled or rejected, with an array of objects that each describes the outcome of each promise.
+
+```js
+Promise.allSettled([Promise.resolve('a'), Promise.reject('error'), Promise.resolve('c')])
+  .then(function (res) {
+    res[0] // { status: "fulfilled", value: 'a' }
+    res[1] // { status: "rejected", reason: 'error' }
+    res[2] // { status: "fulfilled", value: 'c' }
+  })
+```
+
 #### Promise.race(array)
 
 Returns a promise that resolves or rejects with the result of the first promise to resolve/reject, e.g.

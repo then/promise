@@ -98,6 +98,31 @@ Promise.all = function (arr) {
   });
 };
 
+Promise.allSettled = function (iterable) {
+  return Promise.all(
+      iterableToArray(iterable).map(function (item) {
+        function onFulfill(value) {
+          return { status: 'fulfilled', value: value };
+        }
+        function onReject(reason) {
+          return { status: 'rejected', reason: reason };
+        }
+
+        if(item && (typeof item === 'object' || typeof item === 'function')){
+          if(item instanceof Promise && item.then === Promise.prototype.then){
+            return item.then(onFulfill, onReject);
+          }
+          var then = item.then;
+          if (typeof then === 'function') {
+            return new Promise(then.bind(item)).then(onFulfill, onReject)
+          }
+        }
+
+        return onFulfill(item);
+      })
+  );
+};
+
 Promise.reject = function (value) {
   return new Promise(function (resolve, reject) {
     reject(value);
