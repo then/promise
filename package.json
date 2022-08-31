@@ -4,7 +4,7 @@
   "description": "Bare bones Promises/A+ implementation",
   "main": "index.js",
   "scripts": {
-    "prepublish": "node build",
+    "build": "node build",
     "pretest": "node build",
     "pretest-resolve": "node build",
     "pretest-extensions": "node build",
