@@ -7,19 +7,10 @@ For detailed tutorials on its use, see www.promisejs.org
 
 **N.B.** This promise exposes internals via underscore (`_`) prefixed properties.  If you use these, your code will break with each new release.
 
-[![travis][travis-image]][travis-url]
-[![dep][dep-image]][dep-url]
-[![npm][npm-image]][npm-url]
-[![downloads][downloads-image]][downloads-url]
-
-[travis-image]: https://img.shields.io/travis/then/promise.svg?style=flat
-[travis-url]: https://travis-ci.org/then/promise
-[dep-image]: https://img.shields.io/david/then/promise.svg?style=flat
-[dep-url]: https://david-dm.org/then/promise
-[npm-image]: https://img.shields.io/npm/v/promise.svg?style=flat
-[npm-url]: https://npmjs.org/package/promise
-[downloads-image]: https://img.shields.io/npm/dm/promise.svg?style=flat
-[downloads-url]: https://npmjs.org/package/promise
+[![Build Status](https://img.shields.io/github/workflow/status/then/promise/Publish%20Canary/master?style=for-the-badge)](https://github.com/then/promise/actions?query=workflow%3APublish%20Canary+branch%3Amaster)
+[![Rolling Versions](https://img.shields.io/badge/Rolling%20Versions-Enabled-brightgreen?style=for-the-badge)](https://rollingversions.com/then/promise)
+[![NPM version](https://img.shields.io/npm/v/promise?style=for-the-badge)](https://www.npmjs.com/package/promise)
+[![Downloads](https://img.shields.io/npm/dm/promise.svg?style=for-the-badge)](https://www.npmjs.org/package/promise)
 
 ## Installation
 
