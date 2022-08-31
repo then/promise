@@ -2,6 +2,6 @@ components
 node_modules
 test
 .gitignore
-.travis.yml
+.github
 component.json
 coverage
