@@ -1,6 +1,5 @@
 var Promise = require('../');
 
-
 exports.deferred = function () {
   var resolve, reject;
   var promise = new Promise(function (_resolve, _reject) {

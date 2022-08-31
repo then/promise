@@ -4,7 +4,7 @@ var assert = require('assert');
 var Promise = require('../');
 
 describe('nested promises', function () {
-  it('does not result in any wierd behaviour - 1', function (done) {
+  it('does not result in any weird behaviour - 1', function (done) {
     var resolveA, resolveB, resolveC;
     var A = new Promise(function (resolve, reject) {
       resolveA = resolve;
@@ -23,7 +23,7 @@ describe('nested promises', function () {
       done();
     });
   });
-  it('does not result in any wierd behaviour - 2', function (done) {
+  it('does not result in any weird behaviour - 2', function (done) {
     var resolveA, resolveB, resolveC, resolveD;
     var A = new Promise(function (resolve, reject) {
       resolveA = resolve;
@@ -47,7 +47,7 @@ describe('nested promises', function () {
       done();
     });
   });
-  it('does not result in any wierd behaviour - 2', function (done) {
+  it('does not result in any weird behaviour - 2', function (done) {
     var promises = [];
     var resolveFns = [];
     for (var i = 0; i < 100; i++) {
