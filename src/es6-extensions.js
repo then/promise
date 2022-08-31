@@ -98,29 +98,27 @@ Promise.all = function (arr) {
   });
 };
 
+function onSettledFulfill(value) {
+  return { status: 'fulfilled', value: value };
+}
+function onSettledReject(reason) {
+  return { status: 'rejected', reason: reason };
+}
+function mapAllSettled(item) {
+  if(item && (typeof item === 'object' || typeof item === 'function')){
+    if(item instanceof Promise && item.then === Promise.prototype.then){
+      return item.then(onSettledFulfill, onSettledReject);
+    }
+    var then = item.then;
+    if (typeof then === 'function') {
+      return new Promise(then.bind(item)).then(onSettledFulfill, onSettledReject)
+    }
+  }
+
+  return onSettledFulfill(item);
+}
 Promise.allSettled = function (iterable) {
-  return Promise.all(
-      iterableToArray(iterable).map(function (item) {
-        function onFulfill(value) {
-          return { status: 'fulfilled', value: value };
-        }
-        function onReject(reason) {
-          return { status: 'rejected', reason: reason };
-        }
-
-        if(item && (typeof item === 'object' || typeof item === 'function')){
-          if(item instanceof Promise && item.then === Promise.prototype.then){
-            return item.then(onFulfill, onReject);
-          }
-          var then = item.then;
-          if (typeof then === 'function') {
-            return new Promise(then.bind(item)).then(onFulfill, onReject)
-          }
-        }
-
-        return onFulfill(item);
-      })
-  );
+  return Promise.all(iterableToArray(iterable).map(mapAllSettled));
 };
 
 Promise.reject = function (value) {
