@@ -140,3 +140,47 @@ Promise.race = function (values) {
 Promise.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected);
 };
+
+function getAggregateError(errors){
+  if(typeof AggregateError === 'function'){
+    return new AggregateError(errors,'All promises were rejected');
+  }
+
+  var error = new Error('All promises were rejected');
+
+  error.name = 'AggregateError';
+  error.errors = errors;
+
+  return error;
+}
+
+Promise.any = function promiseAny(values) {
+  return new Promise(function(resolve, reject) {
+    var promises = iterableToArray(values);
+    var hasResolved = false;
+    var rejectionReasons = [];
+
+    function resolveOnce(value) {
+      if (!hasResolved) {
+        hasResolved = true;
+        resolve(value);
+      }
+    }
+
+    function rejectionCheck(reason) {
+      rejectionReasons.push(reason);
+
+      if (rejectionReasons.length === promises.length) {
+        reject(getAggregateError(rejectionReasons));
+      }
+    }
+
+    if(promises.length === 0){
+      reject(getAggregateError(rejectionReasons));
+    } else {
+      promises.forEach(function(value){
+        Promise.resolve(value).then(resolveOnce, rejectionCheck);
+      });
+    }
+  });
+};

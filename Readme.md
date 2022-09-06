@@ -141,6 +141,20 @@ Promise.all([Promise.resolve('a'), 'b', Promise.resolve('c')])
   })
 ```
 
+#### Promise.any(array)
+
+Returns a single promise that fulfills as soon as any of the promises in the iterable fulfills, with the value of the fulfilled promise.  If no promises in the iterable fulfill (if all of the given promises are rejected), then the returned promise is rejected with an `AggregateError`
+
+```js
+var rejected = Promise.reject(0);
+var first = new Promise(function (resolve){ setTimeout(resolve, 100, 'quick') });
+var second = new Promise(function (resolve){ setTimeout(resolve, 500, 'slow') });
+
+var promises = [rejected, first, second];
+
+Promise.any(promises) // => succeeds with `quick`
+```
+
 #### Promise.allSettled(array)
 
 Returns a promise that resolves after all of the given promises have either fulfilled or rejected, with an array of objects that each describes the outcome of each promise.

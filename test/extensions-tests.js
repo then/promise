@@ -130,6 +130,76 @@ describe('extensions', function () {
       })
     })
   })
+  describe('Promise.any(...)', function () {
+    describe('an array', function () {
+      describe('that is empty', function () {
+        it('returns a rejected promise for an empty array', function (done) {
+          var res = Promise.any([])
+          assert(res instanceof Promise)
+          res.catch(function (err) {
+            assert(Array.isArray(err.errors))
+            assert(err.errors.length === 0)
+          }).nodeify(done)
+        })
+        it('returns a rejected promise for not argument', function (done) {
+          var res = Promise.any()
+          assert(res instanceof Promise)
+          res.catch(function (err) {
+            assert(err instanceof Error)
+          }).nodeify(done)
+        })
+      })
+      describe('of objects', function () {
+        it('resolved with a first fulfilled value', function (done) {
+          var res = Promise.any([a, b, c])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(a === res)
+          }).nodeify(done)
+        })
+      })
+      describe('of promises', function () {
+        it('resolved with a first fulfilled value', function (done) {
+          var res = Promise.any([B, C])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(b === res)
+          }).nodeify(done)
+        })
+      })
+      describe('of mixed values', function () {
+        it('returns a promise for an array containing the fulfilled values', function (done) {
+          var res = Promise.any([c,B])
+          assert(res instanceof Promise)
+          res.then(function (res) {
+            assert(res === c)
+          }).nodeify(done)
+        })
+      })
+      describe('containing all rejected promise', function () {
+        it('rejects the resulting promise', function (done) {
+          var rejectionB ={test:2}
+          var rejectedB = new Promise(function (resolve, reject) { reject(rejectionB) })
+          var res = Promise.any([rejected, rejectedB])
+          assert(res instanceof Promise)
+          res.catch(function (err) {
+            assert(Array.isArray(err.errors))
+            assert(err.errors[0] === rejection)
+            assert(err.errors[1] === rejectionB)
+            assert(err.errors.length === 2)
+          }).nodeify(done)
+        })
+      })
+      describe('when given a foreign promise', function () {
+        it('should provide the correct value of `this`', function (done) {
+          var p = {then: function (onFulfilled) { onFulfilled({self: this}); }};
+          Promise.any([p]).then(function (results) {
+            assert(p === results.self);
+          }).nodeify(done);
+        });
+      });
+    })
+  })
   describe('Promise.allSettled(...)', function () {
     describe('an array', function () {
       describe('that is empty', function () {
